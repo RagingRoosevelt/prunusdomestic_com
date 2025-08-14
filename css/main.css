@@ -1,5 +1,32 @@
+@font-face {
+  font-family: "EngineerHand";
+  src:
+    local("EngineerHand"),
+    url("/fonts/EngineerHand-l780.ttf") format("truetype");
+}
+@font-face {
+  font-family: "BrassMono";
+  src:
+    local("BrassMono"),
+    url("/fonts/BrassMonoRegular-d9WLg.ttf") format("truetype");
+}
+
+header, footer {
+  font-weight: bold;
+  font-family: "EngineerHand";
+}
+article {
+  font-family: "BrassMono";
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "BrassMono";
+  font-weight: bolt;
+}
+
+
 article img {
   height: 250px;
+  object-fit: cover;
   box-shadow: 5px 5px 5px;
   border: 1px solid black
 }
@@ -7,6 +34,9 @@ article img {
 header {
   top: 0;
   position: sticky;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  z-index: 1;
 
   display: flex;
   align-items: center;
