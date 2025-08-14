@@ -1,0 +1,124 @@
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--
+    The above 2 meta tags *must* come first in the <head>
+    to consistently ensure proper document rendering.
+    Any other head element should come *after* these tags.
+    -->
+
+    <title>Prunus Domestic</title>
+    <!-- Short description of your document's subject -->
+    <meta name="subject" content="your document's subject">
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+    <meta name="geo.region" content="US-OR"><!-- Country code (ISO 3166-1): mandatory, state code (ISO 3166-2): optional; eg. content="US" / content="US-NY" -->
+    <meta name="geo.placename" content="Milwaukie"><!-- eg. content="New York City" -->
+
+    <link rel="icon" type="image/svg" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/lib/pico.classless.purple.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="theme-color" content="#9236a4">
+    
+    <!-- Gives a general age rating based on the document's content -->
+    <meta name="rating" content="General">
+
+  </head>
+  <body>
+    <!-- <nav>
+      asdfasfd
+    </nav> -->
+    <header>
+      <!-- <img 
+        style="height: 4rem; width: 4rem;"
+        alt="Prunus domestic logo: a fine-line drawing of a plum" 
+        src="/assets/img/favicon.svg" /> -->
+        <div id="logo"></div>
+        Prunus Domestic
+      <a id="scroll_to_top" href="#top">[To top]</a>
+    </header>
+    <main>
+      <article id="top">
+        Welcome to Prunus Domestic.  I'm a 3D model designer and small scale 
+        manufacturer located in Milwaukie, OR, just outside of Portland.  I 
+        post most of my designs 
+        <a href="https://www.printables.com/@RagingRoosevelt" target="_blank"></a>
+        for free on Printables and a few I make and sell locally in the 
+        Portland region.
+      </article>
+      <h1>Designs</h1>
+      <article>
+        <h2>Sewing Pattern Weights</h2>
+        <section class="carousel">
+          <!-- TODO: https://github.com/ganlanyuan/tiny-slider -->
+          <script type="module">
+            const slidesContainer = document.querySelector(".slides-container");
+            const slide = document.querySelector(".slide");
+            const prevButton = document.getElementById("slide-arrow-prev");
+            const nextButton = document.getElementById("slide-arrow-next");
+            nextButton.addEventListener("click", () => {
+              const slideWidth = slide.clientWidth;
+              slidesContainer.scrollLeft += slideWidth;
+            });
+            prevButton.addEventListener("click", () => {
+              const slideWidth = slide.clientWidth;
+              slidesContainer.scrollLeft -= slideWidth;
+            });
+          </script>
+          <button class="slide-arrow" id="slide-arrow-prev">
+            &#8249;
+          </button>
+          <button class="slide-arrow" id="slide-arrow-next">
+            &#8250;
+          </button>
+          <ul class="slides-container" id="slides-container">
+            <li class="slide">
+              <img alt="Sewing weights in storage case" src="/assets/img/projects/sewing_pattern_weights/weights_in_case.jpg">
+            </li>
+            <li class="slide">
+              <img alt="Stack of sewing weights with a silver accent inlay" src="/assets/img/projects/sewing_pattern_weights/weights_stacked_grey.jpg">
+            </li>
+            <li class="slide">
+              <img alt="Stack of sewing weights with various colors of accent inlays" src="/assets/img/projects/sewing_pattern_weights/weights_various_colors.jpg">
+            </li>
+            <li class="slide">
+              <img alt="Sewing weights in a stack with one showing an embossed bottom image" src="/assets/img/projects/sewing_pattern_weights/weights_stacked_embossed.jpg">
+            </li>
+          </ul>
+
+        </section>
+        
+        <p>
+        Use these weights to keep your pattern positioned while marking or 
+        cutting out your project!
+        </p>
+
+        <p>
+        I'm selling these at 
+        <a href="https://www.sewcialstudies.com/">Sewcial Studies</a> in 
+        downtown Milwaukie.
+        </p>
+        
+        
+      </article>
+      <article>
+        <h2>8-bay 3U NAS enclosure for 10" Mini-Racks</h2>
+        <img style="height: 250px" alt="Enclosure installed in a mini rack" src="/assets/img/projects/minirack_8bay_3U_nas.jpg">
+
+        <p>
+          Just using normal drive shelves, you can get a max of two 3.5" drives 
+          per 1U of rack space.  This enclosure uses a Jonsbo N3 backplane to 
+          enable 2.67 drives per 1U.  A small improvement but more is always 
+          better when it comes to storage.
+        </p>
+        <p>
+          I published this design on <a href="https://www.printables.com/model/1372686" target="_blank">Printables</a>.
+        </p>
+      </article>
+    </main>
+    <footer>
+      Prunus Domestic, operated by Theodore Lindsey ©2025
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 2,
+		"editor.language.colorizedBracketPairs": [
+			["[", "]"],
+			["(", ")"], 
+			["{", "}"],
+			["<", ">"]
+		],
+		"editor.rulers": [80,120]
+
+	}
+}
