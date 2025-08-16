@@ -40,20 +40,30 @@ header {
 
   display: flex;
   align-items: center;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  gap: 1rem;
 
-  font-size: xx-large;
-
-  & a#scroll_to_top {
-    margin-left: auto;
-  }
-
-  background-color: var(--pico-primary-background);
+  & a#home {
+    font-size: xx-large;
+  }  
   &, & a {
     color: var(--pico-primary-inverse);
   }
-  & a {
-    font-size: medium;
+  & :not(#hero) a, & > a {
+    text-decoration: dotted underline;
   }
+  & :last-child {
+    padding: 0 1rem;
+  }
+  & div#hero {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  background-color: var(--pico-primary-background);
+
   
   & div#logo {
     position: relative;
