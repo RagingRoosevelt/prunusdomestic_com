@@ -71,8 +71,8 @@ header {
     height: 4rem;
     width: 4rem;
     background-color: var(--pico-primary-inverse);
-    mask: url(/assets/img/favicon.svg) no-repeat center / contain;
-    -webkit-mask: url(/assets/img/favicon.svg) no-repeat center / contain;
+    mask: url(/assets/img/logo.svg) no-repeat center / contain;
+    -webkit-mask: url(/assets/img/logo.svg) no-repeat center / contain;
   }
 }
 
