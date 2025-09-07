@@ -23,6 +23,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
+
 @media (prefers-color-scheme: dark)  {
   article svg {
     filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)) !important;
@@ -72,6 +73,19 @@ ul.carousel li > div {
   align-items: center;
 }
 
+@media (max-width: 500px) {
+  header {
+    --header-font-large: large;
+    /* --header-font-small:  */
+  }
+}
+@media (min-width: 500px) {
+  header {
+    --header-font-large: xx-large;
+    /* --header-font-small:  */
+  }
+}
+/* TODO: https://threkk.medium.com/how-to-make-a-css-only-hamburger-menu-f7ad41e13399 */
 header {
   top: 0;
   position: sticky;
@@ -86,7 +100,7 @@ header {
   gap: 1rem;
 
   & a#home {
-    font-size: xx-large;
+    font-size: var(--header-font-large);
   }  
   &, & a {
     color: var(--pico-primary-inverse);
