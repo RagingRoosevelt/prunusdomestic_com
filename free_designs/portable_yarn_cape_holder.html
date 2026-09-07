@@ -10,7 +10,7 @@
     Any other head element should come *after* these tags.
     -->
 
-    <title>Prunus Domestic</title>
+    <title>Prunus Domestic — Portable Yarn Cake Spinner / Holder</title>
     <!-- Short description of your document's subject -->
     <meta name="subject" content="Prunus Domestic designs by RagingRoosevelt (Theodore Lindsey)">
     <meta name="description" content="Prunus Domestic designs by RagingRoosevelt (Theodore Lindsey)">
@@ -30,15 +30,12 @@
     <meta name="twitter:image" content="https://www.PrunusDomestic.com/assets/img/logo.svg">
     <meta name="twitter:image:alt" content="Prunus domestic brand logo: a line-illustration of a plum">
 
-    
+
     <!-- Gives a general age rating based on the document's content -->
     <meta name="rating" content="General">
 
   </head>
   <body id="top">
-    <!-- <nav>
-      asdfasfd
-    </nav> -->
     <header>
       <div id="hero">
         <div id="logo"></div>
@@ -51,24 +48,39 @@
     </header>
     <main>
       <article>
-        Welcome to Prunus Domestic Designs.  I'm a Textile Artist, a 3D model designer, and small scale 
-        manufacturer located in Milwaukie, OR, just outside of Portland.  I 
-        post most of my designs 
-        
-        for free <a href="https://www.printables.com/@RagingRoosevelt" target="_blank">on Printables</a> and a few I make and sell locally in the 
-        Portland region.
-      </article>
-      <h1>Designs</h1>
-      <article>
-        <ul>
-          <li><a href="/free_designs/">Free Designs</a></li>
-          <li><a href="/products/">Products</a></li>
-          <li><a href="/commissions/">Commissions</a></li>
+        <h1>Portable Yarn Cake Spinner / Holder</h1>
+        <ul class="carousel">
+          <li><div><img alt="Yarn spinner with yarn" src="/assets/img/projects/yarn_cake_spinner/spinner_with_yarn_1000x750.jpg" /></div></li>
+          <li><div><img loading="lazy" alt="Yarn spinner on lanyard" src="/assets/img/projects/yarn_cake_spinner/spinner_on_lanyard_1000x750.jpg" /></div></li>
+          <li><div><img loading="lazy" alt="Yarn spinner and plate" src="/assets/img/projects/yarn_cake_spinner/spinner_and_plate_1000x750.jpg" /></div></li>
+          <li><div><img loading="lazy" alt="Yarn spinner, disassembled" src="/assets/img/projects/yarn_cake_spinner/spinner_dismantled_1000x750.jpg" /></div></li>
         </ul>
+        <p>This is handy for keeping your yarn cake from rolling away.  You can
+          use the base holder when you're working at a table or desk, or you
+          can set up a lanyard leash and use it from your wrist.  It's on
+          <a href="https://www.printables.com/model/1351008" target="_blank">Printables</a>
+          if you want to make your own.
+
+        </p>
       </article>
     </main>
     <footer>
       Prunus Domestic, operated by Theodore Lindsey ©2025
     </footer>
+    <script type="module">
+      import {tns} from '/js/lib/tiny-slider-2.9.3/tiny-slider.js'
+      document.querySelectorAll("ul.carousel").forEach(element => {
+        var slider = tns({
+          container: element,
+          items: 1,
+          slideBy: "page",
+          autoplay: false,
+          controlsPosition: "bottom",
+          navPosition: "bottom",
+          autoplayButtonOutput: false,
+          mouseDrag: true,
+        })
+      });
+    </script>
   </body>
 </html>
