@@ -44,7 +44,7 @@ article img, article svg {
 .tns-outer {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 .tns-controls, .tns-nav {
   width: 100%;
