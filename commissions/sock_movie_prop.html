@@ -48,9 +48,14 @@
         <a href="/" id="home">Prunus Domestic</a>
       </div>
 
-      <a href="/retail.html">Retail</a>
-      <a href="/pdx_local_retail.html">Local PDX</a>
-      <button id="scroll_to_top" onclick="window.scrollTo(0,0)">To top</button>
+      <button type="button" class="nav-toggle" command="toggle-popover" commandfor="site-nav" aria-label="Menu"><span></span></button>
+      <nav id="site-nav" popover>
+        <a href="/free_designs/">Free Designs</a>
+        <a href="/products/">Products</a>
+        <a href="/commissions/">Commissions</a>
+        <a href="/retail.html">Retail</a>
+        <a href="/pdx_local_retail.html">Local PDX</a>
+      </nav>
     </header>
     <main>
       <nav aria-label="breadcrumb">

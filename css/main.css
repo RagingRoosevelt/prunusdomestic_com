@@ -43,7 +43,7 @@ article img, article svg {
 
 .card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(max(220px, (100% - 3rem) / 4), 1fr));
   gap: 1rem;
 }
 .card-list > article {
@@ -103,7 +103,6 @@ ul.carousel li > div {
     /* --header-font-small:  */
   }
 }
-/* TODO: https://threkk.medium.com/how-to-make-a-css-only-hamburger-menu-f7ad41e13399 */
 header {
   top: 0;
   position: sticky;
@@ -113,20 +112,20 @@ header {
 
   display: flex;
   align-items: center;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: flex-end;
   gap: 1rem;
 
   & a#home {
     font-size: var(--header-font-large);
-  }  
+  }
   &, & a {
     color: var(--pico-primary-inverse);
   }
-  & :not(#hero) a, & > a {
+  & nav a {
     text-decoration: dotted underline;
   }
-  & :last-child {
+  & nav :last-child {
     padding: 0 1rem;
   }
   & div#hero {
@@ -137,7 +136,7 @@ header {
 
   background-color: var(--pico-primary-background);
 
-  
+
   & div#logo {
     position: relative;
     display: inline-block;
@@ -146,6 +145,97 @@ header {
     background-color: var(--pico-primary-inverse);
     mask: url(/assets/img/logo.svg) no-repeat center / contain;
     -webkit-mask: url(/assets/img/logo.svg) no-repeat center / contain;
+  }
+
+  /* Hamburger menu: Pico's classless build has no built-in nav-collapse
+     component. The same button + nav[popover] markup ships on every page and
+     at every breakpoint; only this CSS changes between mobile and desktop.
+     The button uses the native command/commandfor="toggle-popover" invoker
+     (no JS) to open/close #site-nav, which gets aria-expanded/aria-controls/
+     aria-haspopup and Escape/light-dismiss for free from the browser. On
+     desktop the button is hidden and #site-nav is forced flex regardless of
+     its popover-open state, ignoring the toggle entirely. */
+  & button.nav-toggle {
+    display: none;
+    cursor: pointer;
+    width: 1.75rem;
+    height: 1.5rem;
+    position: relative;
+    flex: 0 0 auto;
+    padding: 0;
+    border: none;
+    background: none;
+
+    &::before, &::after, & > span {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--pico-primary-inverse);
+    }
+    &::before {
+      top: 0;
+    }
+    & > span {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    &::after {
+      bottom: 0;
+    }
+  }
+
+  & nav#site-nav {
+    margin: 0;
+    border: none;
+    padding: 0.75rem 1rem;
+    color: var(--pico-primary-inverse);
+    background-color: var(--pico-primary-background);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  /* Pico's classless build puts "display: flex" on every bare <nav>
+     unconditionally; as an author rule that beats the popover UA
+     stylesheet's own "display: none" default no matter the specificity,
+     so the closed state has to be reasserted explicitly here. */
+  & nav#site-nav:not(:popover-open) {
+    display: none;
+  }
+  & nav#site-nav:popover-open {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    position: fixed;
+    inset: auto 0 auto auto;
+    top: var(--header-height, 4.5rem);
+    right: 0.5rem;
+  }
+}
+
+@media (max-width: 500px) {
+  header button.nav-toggle {
+    display: block;
+  }
+}
+@media (min-width: 500px) {
+  header button.nav-toggle {
+    display: none;
+  }
+  header nav#site-nav {
+    display: flex !important;
+    position: static !important;
+    inset: auto !important;
+    margin: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    color: inherit !important;
+    background: none !important;
+    box-shadow: none !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
   }
 }
 

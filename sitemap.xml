@@ -5,11 +5,23 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://www.prunusdomestic.com/commissions/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.prunusdomestic.com/commissions/sock_movie_prop.html</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.prunusdomestic.com/free_designs/</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prunusdomestic.com/free_designs/turkish_drop_spindle.html</loc>
+    <loc>https://www.prunusdomestic.com/free_designs/8_bay_3U_NAS_enclosure.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.prunusdomestic.com/free_designs/bobbin_keeper.html</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -17,7 +29,19 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.prunusdomestic.com/free_designs/8_bay_3U_NAS_enclosure.html</loc>
+    <loc>https://www.prunusdomestic.com/free_designs/seam_allowance_tracing_discs.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.prunusdomestic.com/free_designs/slant_shank_presser_foot_adapter.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.prunusdomestic.com/free_designs/spool_pin_cap.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.prunusdomestic.com/free_designs/turkish_drop_spindle.html</loc>
     <priority>0.6</priority>
   </url>
   <url>
@@ -29,19 +53,11 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.prunusdomestic.com/commissions/</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.prunusdomestic.com/commissions/sock_movie_prop.html</loc>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.prunusdomestic.com/retail.html</loc>
+    <loc>https://www.prunusdomestic.com/pdx_local_retail.html</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.prunusdomestic.com/pdx_local_retail.html</loc>
+    <loc>https://www.prunusdomestic.com/retail.html</loc>
     <priority>0.6</priority>
   </url>
 </urlset>

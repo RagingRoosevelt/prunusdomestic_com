@@ -1,11 +1,11 @@
-# prunusdomestic.com — static site, deployed via GitHub Pages from main
+# prunusdomestic.com: static site, deployed via GitHub Pages from main
 # No build step: index.html/retail.html/pdx_local_retail.html are served as-is.
 
 PORT ?= 8000
 CLAUDE_PORT ?= 8765
 
 .DEFAULT_GOAL := help
-.PHONY: help serve claude_test kill_claude_test open bigimages check-links clean
+.PHONY: help serve claude_test kill_claude_test open bigimages check-links sitemap clean
 
 help: ## show this list
 	@grep -hE '^[a-z_-]+:.*##' $(MAKEFILE_LIST) | sed -E 's/:[^#]*## /|/' | column -t -s '|'
@@ -30,6 +30,9 @@ check-links: ## grep html for local links and flag ones that don't resolve to a 
 	@grep -rhoE '(href|src)="[^":][^"]*"' *.html 2>/dev/null | sed -E 's/^(href|src)="//; s/"$$//; s/#.*$$//' \
 	  | grep -vE '^(https?:|mailto:|/?$$)' | sed -E 's#^/##' | sort -u \
 	  | while read -r p; do [ -e "$$p" ] || echo "missing: $$p"; done
+
+sitemap: ## regenerate sitemap.xml from the .html files on disk (keeps hand-set priorities, defaults new pages)
+	uv run python3 generate_sitemap.py
 
 clean: ## remove OS/editor cruft
 	find . -name '.DS_Store' -delete
