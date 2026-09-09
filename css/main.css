@@ -59,6 +59,42 @@ article img, article svg {
   color: inherit;
 }
 
+/* CSS-only category filtering: no filter checked shows everything; each
+   checked box re-shows cards carrying its tag (OR logic). Hiding a card
+   removes it from the grid entirely, so the auto-fit column sizing above
+   already handles resizing the remaining cards. */
+.filter-wrap {
+  & fieldset.tag-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    border: none;
+    padding: 0;
+    margin: 0 0 1rem;
+
+    & legend {
+      font-weight: bold;
+      padding: 0;
+    }
+    & label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+    }
+  }
+
+  &:has(.filter:checked) .card-list article {
+    display: none;
+  }
+  &:has(.filter[value="homelab"]:checked) .card-list article[data-tags~="homelab"],
+  &:has(.filter[value="sewing"]:checked) .card-list article[data-tags~="sewing"],
+  &:has(.filter[value="yarncraft"]:checked) .card-list article[data-tags~="yarncraft"] {
+    display: block;
+  }
+}
+
 .tns-outer {
   display: flex;
   flex-direction: column;
