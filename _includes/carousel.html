@@ -2,15 +2,51 @@
   One image renders as a plain <img>: a single-slide carousel is just nav dots
   around nothing. Two or more get the tiny-slider markup, which base.html
   detects by the class name and only then loads the slider script.
+
+  Each photo is wrapped in a button that opens a full-screen <dialog popover>.
+  popovertarget is declarative, so this needs no JS, and it shipped with the
+  Popover API itself (Chrome 114 / Safari 17 / Firefox 125) - notably older
+  and better supported than the command/commandfor the nav toggle uses.
+
+  Closing: Escape comes from the browser, but light-dismiss does not help here
+  - it only fires for clicks OUTSIDE the popover, and this one covers the
+  viewport, so there is no outside left to click. Hence the enlarged image is
+  itself a hide-invoker. It's aria-hidden with tabindex="-1" so assistive tech
+  gets one close control rather than two; the dialog's aria-label already
+  carries the same alt text, and the X button stays the focusable one.
+
+  tiny-slider clones slides for looping, which duplicates the buttons. That's
+  fine: several invokers may point at one popover. The dialogs are emitted
+  outside the <ul>, so they are never cloned and their ids stay unique.
 {%- endcomment -%}
 {%- assign imgs = include.images -%}
 {%- if imgs.size > 1 %}
         <ul class="carousel">
 {%- for img in imgs %}
-          <li><div><img{% unless forloop.first %} loading="lazy"{% endunless %} alt="{{ img.alt }}" src="{{ img.src }}"></div></li>
+          <li><div>
+            <button type="button" class="zoom" popovertarget="lightbox-{{ forloop.index }}" aria-label="View full screen: {{ img.alt }}">
+              <img{% unless forloop.first %} loading="lazy"{% endunless %} alt="{{ img.alt }}" src="{{ img.src }}">
+            </button>
+          </div></li>
 {%- endfor %}
         </ul>
+{%- for img in imgs %}
+        <dialog popover id="lightbox-{{ forloop.index }}" class="lightbox" aria-label="{{ img.alt }}">
+          <button type="button" class="lightbox-close" popovertarget="lightbox-{{ forloop.index }}" popovertargetaction="hide" aria-label="Close full screen image">&times;</button>
+          <button type="button" class="lightbox-dismiss" popovertarget="lightbox-{{ forloop.index }}" popovertargetaction="hide" tabindex="-1" aria-hidden="true">
+            <img alt="{{ img.alt }}" src="{{ img.src }}">
+          </button>
+        </dialog>
+{%- endfor %}
 {%- elsif imgs.size == 1 -%}
 {%- assign img = imgs[0] %}
-        <img{% if img.style %} style="{{ img.style }}"{% endif %} alt="{{ img.alt }}" src="{{ img.src }}">
+        <button type="button" class="zoom" popovertarget="lightbox-1" aria-label="View full screen: {{ img.alt }}">
+          <img{% if img.style %} style="{{ img.style }}"{% endif %} alt="{{ img.alt }}" src="{{ img.src }}">
+        </button>
+        <dialog popover id="lightbox-1" class="lightbox" aria-label="{{ img.alt }}">
+          <button type="button" class="lightbox-close" popovertarget="lightbox-1" popovertargetaction="hide" aria-label="Close full screen image">&times;</button>
+          <button type="button" class="lightbox-dismiss" popovertarget="lightbox-1" popovertargetaction="hide" tabindex="-1" aria-hidden="true">
+            <img alt="{{ img.alt }}" src="{{ img.src }}">
+          </button>
+        </dialog>
 {%- endif -%}

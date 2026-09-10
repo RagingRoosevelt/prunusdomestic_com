@@ -44,14 +44,75 @@ article img, article svg {
   }
 }
 
-/* A single-image page renders a bare <img> instead of a carousel (see
+/* A single-image page renders one photo instead of a carousel (see
    _includes/carousel.html). Carousel slides get centered by the
-   `ul.carousel li > div` rule below, so center the standalone image to match.
+   `ul.carousel li > div` rule below, so center the standalone one to match.
    The child combinator keeps this off card thumbnails and carousel slides,
-   which both sit deeper than a direct child of <article>. */
-article > img {
+   which both sit deeper than a direct child of <article>. `article > img`
+   still applies to loose images in prose, like the colour chart on the
+   pattern weights page. */
+article > img,
+article > button.zoom {
   display: block;
   margin-inline: auto;
+}
+
+/* The zoom button exists only to make the photo an activatable control, so
+   strip every bit of button chrome and let the <img> inside be the whole
+   visual. zoom-in is the conventional affordance for "opens larger". */
+button.zoom,
+button.lightbox-dismiss {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+/* zoom-in on the thumbnail, zoom-out on the enlarged copy: the cursor is the
+   only hint that clicking the full-screen photo closes it. */
+button.zoom { cursor: zoom-in; }
+button.lightbox-dismiss { cursor: zoom-out; display: block; }
+
+/* Pico styles `dialog` as a ready-made full-screen overlay - fixed inset 0,
+   centred flex, backdrop-filter - so the lightbox reuses it rather than
+   rebuilding it. The one thing to undo: Pico hides a dialog with
+   `dialog:not([open])`, and a popover-opened dialog never gets the `open`
+   attribute, it matches :popover-open instead. Higher specificity here
+   (0,2,1 against Pico's 0,1,1) re-shows it without !important. */
+dialog.lightbox:popover-open {
+  display: flex;
+  flex-direction: column;
+}
+
+/* `article img` sets a fixed 250px height with object-fit: cover for the
+   in-page thumbnails; the full-screen copy has to opt out of all of it and
+   scale to fit instead. `article dialog.lightbox img` outspecifies it. */
+article dialog.lightbox img,
+dialog.lightbox img {
+  height: auto;
+  width: auto;
+  max-height: 100vh;
+  max-width: 100vw;
+  object-fit: contain;
+  border: 0;
+  filter: none;
+}
+
+dialog.lightbox .lightbox-close {
+  position: fixed;
+  top: 0.5rem;
+  right: 0.75rem;
+  z-index: 1;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .card-list {
