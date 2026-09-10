@@ -25,19 +25,22 @@ h1, h2, h3, h4, h5, h6 {
 
 
 @media (prefers-color-scheme: dark)  {
-  article svg {
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)) !important;
+  article img, article svg {
+    --drop-shadow-color: rgba(255,255,255,0.5) !important;
   }
 }
 article img, article svg {
+  --drop-shadow-color: black;
+
   height: 250px;
   &:is(svg) {
+    filter: drop-shadow(0 0 5px var(--drop-shadow-color)) !important;
   }
   &:is(img) {
     /* box-shadow: 5px 5px 5px; */
     object-fit: cover;
-    border: 1px solid black;
-    filter: drop-shadow(5px 5px 5px black);
+    border: 1px solid var(--drop-shadow-color);
+    filter: drop-shadow(5px 5px 5px var(--drop-shadow-color));
   }
 }
 
