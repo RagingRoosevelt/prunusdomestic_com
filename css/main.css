@@ -247,9 +247,6 @@ header {
   & nav a {
     text-decoration: dotted underline;
   }
-  & nav :last-child {
-    padding: 0 1rem;
-  }
   & div#hero {
     margin-right: auto;
     display: flex;
