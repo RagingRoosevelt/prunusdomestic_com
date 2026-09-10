@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+{% include head.html %}
+  </head>
+  <body id="top">
+{% include header.html %}
+    <main>
+{{ content }}
+    </main>
+{% include footer.html %}
+{%- comment -%}
+  `content` here is the fully-rendered page, so this catches carousels from
+  front matter and any hand-written one in a page body alike. Nothing to
+  remember to set per page; the string just has to match carousel.html.
+{%- endcomment -%}
+{%- if content contains 'class="carousel"' %}
+    <script type="module">
+      import {tns} from '/js/lib/tiny-slider-2.9.3/tiny-slider.js'
+      document.querySelectorAll("ul.carousel").forEach(element => {
+        var slider = tns({
+          container: element,
+          items: 1,
+          slideBy: "page",
+          autoplay: false,
+          controlsPosition: "bottom",
+          navPosition: "bottom",
+          autoplayButtonOutput: false,
+          mouseDrag: true,
+        })
+      });
+    </script>
+{%- endif %}
+  </body>
+</html>

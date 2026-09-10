@@ -44,6 +44,16 @@ article img, article svg {
   }
 }
 
+/* A single-image page renders a bare <img> instead of a carousel (see
+   _includes/carousel.html). Carousel slides get centered by the
+   `ul.carousel li > div` rule below, so center the standalone image to match.
+   The child combinator keeps this off card thumbnails and carousel slides,
+   which both sit deeper than a direct child of <article>. */
+article > img {
+  display: block;
+  margin-inline: auto;
+}
+
 .card-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(max(220px, (100% - 3rem) / 4), 1fr));
@@ -130,11 +140,13 @@ ul.carousel li > div {
   align-items: center;
 }
 
-@media (max-width: 500px) {
-  header {
-    --header-font-large: large;
-    /* --header-font-small:  */
-  }
+/* Wordmark size stays on width alone, with its own 500px threshold: this is
+   about the title fitting, not about whether the nav collapses. Written
+   mobile-first - small is the default, one min-width query upgrades it - so
+   there's no second query to disagree with this one at the boundary. */
+header {
+  --header-font-large: large;
+  /* --header-font-small:  */
 }
 @media (min-width: 500px) {
   header {
@@ -142,6 +154,16 @@ ul.carousel li > div {
     /* --header-font-small:  */
   }
 }
+/* Pico zeroes horizontal padding on body > header from 576px up, because its
+   max-width plus auto margins are meant to serve as the gutter. This header
+   paints its own background and right-aligns the nav toggle, so with no
+   padding the hamburger sits flush against the edge of the purple bar. Put the
+   inline padding back. Matching Pico's own `body > header` specificity, and
+   loaded after it, so this wins without needing !important. */
+body > header {
+  padding-inline: var(--pico-block-spacing-horizontal);
+}
+
 header {
   top: 0;
   position: sticky;
@@ -195,7 +217,7 @@ header {
      desktop the button is hidden and #site-nav is forced flex regardless of
      its popover-open state, ignoring the toggle entirely. */
   & button.nav-toggle {
-    display: none;
+    display: block;
     cursor: pointer;
     width: 1.75rem;
     height: 1.5rem;
@@ -253,12 +275,14 @@ header {
   }
 }
 
-@media (max-width: 500px) {
-  header button.nav-toggle {
-    display: block;
-  }
-}
-@media (min-width: 500px) {
+/* The full link row needs BOTH landscape and enough width; anything else keeps
+   the hamburger, which is the base state set on button.nav-toggle above.
+   Width alone was not enough - a phone reporting 605 CSS px in portrait
+   cleared the old 500px threshold and got the desktop nav. Expressed as a
+   single override rather than a max/min pair, so there is no boundary width
+   where two queries both match or neither does. A portrait desktop monitor
+   gets the hamburger too, which is unnecessary but not broken. */
+@media (orientation: landscape) and (min-width: 500px) {
   header button.nav-toggle {
     display: none;
   }

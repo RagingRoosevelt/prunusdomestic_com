@@ -1,0 +1,20 @@
+services:
+  jekyll:
+    image: jekyll/jekyll
+    volumes:
+      - './:/srv/jekyll'
+      # Named volume so the ~98 github-pages gems survive `--rm` instead of
+      # being re-downloaded on every build.
+      - 'bundle:/usr/gem'
+    ports:
+      # 8000/35730 rather than Jekyll's 4000/35729 defaults, so this can run
+      # alongside another Jekyll site without fighting over ports.
+      - '8000:8000'
+      - '35730:35730'
+    # `bundle exec` so the Gemfile's github-pages pins win over the Jekyll
+    # baked into the image (4.2.2), which is not the version GitHub Pages runs.
+    # `bundle check ||` makes the gem volume self-populating on a fresh clone.
+    command: sh -lc 'bundle check || bundle install; bundle exec jekyll serve --host 0.0.0.0 --port 8000 --livereload --livereload-port 35730 --incremental --force_polling'
+
+volumes:
+  bundle:

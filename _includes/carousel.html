@@ -1,0 +1,16 @@
+{%- comment -%}
+  One image renders as a plain <img>: a single-slide carousel is just nav dots
+  around nothing. Two or more get the tiny-slider markup, which base.html
+  detects by the class name and only then loads the slider script.
+{%- endcomment -%}
+{%- assign imgs = include.images -%}
+{%- if imgs.size > 1 %}
+        <ul class="carousel">
+{%- for img in imgs %}
+          <li><div><img{% unless forloop.first %} loading="lazy"{% endunless %} alt="{{ img.alt }}" src="{{ img.src }}"></div></li>
+{%- endfor %}
+        </ul>
+{%- elsif imgs.size == 1 -%}
+{%- assign img = imgs[0] %}
+        <img{% if img.style %} style="{{ img.style }}"{% endif %} alt="{{ img.alt }}" src="{{ img.src }}">
+{%- endif -%}

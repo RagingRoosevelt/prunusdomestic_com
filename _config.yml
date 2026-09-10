@@ -1,0 +1,55 @@
+title: Prunus Domestic
+url: "https://www.prunusdomestic.com"
+description: >-
+  Prunus Domestic is a 3D design and small-batch manufacturing studio in
+  Milwaukie, Oregon, creating textile tools and fiber-craft accessories. Free
+  designs on Printables; products made and sold locally.
+
+# Site-wide <head> constants. Per-page overrides go in each page's front matter.
+# `title_suffix` is the fallback for pages outside a section; a section's own
+# suffix lives on its index page and is inherited by every item in it.
+title_suffix: Prunus Domestic
+subject: "Prunus Domestic designs by RagingRoosevelt (Theodore Lindsey)"
+og_image: /assets/img/logo.svg
+og_image_alt: "Prunus domestic brand logo: a line-illustration of a plum"
+theme_color: "#9236a4"
+geo_region: US-OR
+geo_placename: Milwaukie
+copyright: "Prunus Domestic, operated by Theodore Lindsey ©2026"
+
+# .html permalinks preserve every URL the old hand-written site published.
+collections:
+  free_designs:
+    output: true
+    permalink: /:collection/:path.html
+  products:
+    output: true
+    permalink: /:collection/:path.html
+  classes:
+    output: true
+    permalink: /:collection/:path.html
+  commissions:
+    output: true
+    permalink: /:collection/:path.html
+
+# `section` drives three things at once: nav highlighting, breadcrumb parent
+# lookup, and which collection a section index lists.
+defaults:
+  - scope: {path: "", type: free_designs}
+    values: {layout: page, section: free_designs, sort_order: 99}
+  - scope: {path: "", type: products}
+    values: {layout: page, section: products, sort_order: 99}
+  - scope: {path: "", type: classes}
+    values: {layout: page, section: classes, sort_order: 99}
+  - scope: {path: "", type: commissions}
+    values: {layout: page, section: commissions, sort_order: 99}
+
+plugins:
+  - jekyll-sitemap
+
+exclude:
+  - Makefile
+  - README.md
+  - start.sh
+  - docker-compose.yml
+  - "*.code-workspace"

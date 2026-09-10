@@ -1,0 +1,72 @@
+{%- comment -%}
+  Section index pages are the only site.pages carrying a `section`, so this
+  finds the parent index of any item page and inherits its title suffix.
+  Page-level `title_suffix` wins; pages with no section fall to site-wide.
+{%- endcomment -%}
+{%- assign sect = site.pages | where: "section", page.section | first -%}
+{%- assign suffix = page.title_suffix | default: sect.title_suffix | default: site.title_suffix -%}
+{%- assign seo_title = page.seo_title | default: page.title -%}
+{%- assign full_title = seo_title | append: " | " | append: suffix -%}
+{%- assign desc = page.description | default: site.description -%}
+{%- assign og_desc = page.og_description | default: desc -%}
+{%- assign canonical = page.url | replace: "index.html", "" | absolute_url -%}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--
+    The above 2 meta tags *must* come first in the <head>
+    to consistently ensure proper document rendering.
+    Any other head element should come *after* these tags.
+    -->
+
+    <title>{{ full_title }}</title>
+    <!-- Short description of your document's subject -->
+    <meta name="subject" content="{{ site.subject }}">
+    <meta name="description" content="{{ desc }}">
+    <meta name="geo.region" content="{{ site.geo_region }}"><!-- Country code (ISO 3166-1): mandatory, state code (ISO 3166-2): optional; eg. content="US" / content="US-NY" -->
+    <meta name="geo.placename" content="{{ site.geo_placename }}"><!-- eg. content="New York City" -->
+
+    <link rel="canonical" href="{{ canonical }}">
+    <link rel="icon" type="image/svg" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/lib/pico.classless.purple.css">
+    <link rel="stylesheet" href="/css/lib/tiny-slider-2.9.3.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="theme-color" content="{{ site.theme_color }}">
+
+    <!--Social Meta Info: Facebook Open Graph-->
+    <meta property="og:title" content="{{ page.og_title | default: full_title }}">
+    <meta property="og:description" content="{{ og_desc }}">
+    <meta property="og:url" content="{{ canonical }}">
+    <meta property="og:type" content="{{ page.og_type | default: 'website' }}">
+    <meta property="og:image" content="{{ page.og_image | default: site.og_image | absolute_url }}">
+    <meta property="og:image:alt" content="{{ page.og_image_alt | default: site.og_image_alt }}">
+    <!--Social Meta Info: Twitter Card-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page.og_title | default: full_title }}">
+    <meta name="twitter:description" content="{{ og_desc }}">
+    <meta name="twitter:image" content="{{ page.og_image | default: site.og_image | absolute_url }}">
+    <meta name="twitter:image:alt" content="{{ page.og_image_alt | default: site.og_image_alt }}">
+
+    <!-- Gives a general age rating based on the document's content -->
+    <meta name="rating" content="General">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Prunus Domestic",
+      "description": "Prunus Domestic is a 3D design and small-batch manufacturing studio creating textile tools and fiber-craft accessories.",
+      "url": "{{ '/' | absolute_url }}",
+      "logo": "{{ site.og_image | absolute_url }}",
+      "image": "{{ site.og_image | absolute_url }}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Milwaukie",
+        "addressRegion": "OR",
+        "addressCountry": "US"
+      },
+      "sameAs": [
+        "https://www.printables.com/@RagingRoosevelt"
+      ]
+    }
+    </script>

@@ -1,0 +1,34 @@
+---
+layout: base
+---
+{%- comment -%}
+  Cards are generated from the section's collection, so a card's image and alt
+  text come from the item page itself and can't drift out of sync with it.
+  The checkbox list is declared per page in `filters`; the matching
+  :has(...:checked) rules live in css/main.css, since CSS can't loop.
+  .filter-wrap is emitted unconditionally - with no checkboxes inside it, none
+  of the filtering rules can ever match, so it's inert.
+{%- endcomment -%}
+{%- assign items = site[page.section] | sort: "sort_order" %}
+      <h1>{{ page.title }}</h1>
+{{ content }}
+      <div class="filter-wrap">
+{%- if page.filters %}
+        <fieldset class="tag-filters">
+          <legend>Filter by category</legend>
+{%- for f in page.filters %}
+          <label><input type="checkbox" class="filter" value="{{ f.value }}"> {{ f.label }}</label>
+{%- endfor %}
+        </fieldset>
+{%- endif %}
+        <div class="card-list">
+{%- for item in items %}
+          <article{% if item.tags.size > 0 %} data-tags="{{ item.tags | join: ' ' }}"{% endif %}>
+            <a href="{{ item.url }}">
+              <img loading="lazy" alt="{{ item.card_alt | default: item.images[0].alt }}" src="{{ item.card_image | default: item.images[0].src }}">
+              <h2>{{ item.title }}</h2>
+            </a>
+          </article>
+{%- endfor %}
+        </div>
+      </div>

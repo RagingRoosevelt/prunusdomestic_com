@@ -1,20 +1,25 @@
-# prunusdomestic.com: static site, deployed via GitHub Pages from main
-# No build step: index.html/retail.html/pdx_local_retail.html are served as-is.
+# prunusdomestic.com: Jekyll site, built by GitHub Pages from main.
+# Local builds run in Docker so no Ruby toolchain is needed on the host.
 
 PORT ?= 8000
 CLAUDE_PORT ?= 8765
+JEKYLL := docker compose run --rm --service-ports jekyll
 
 .DEFAULT_GOAL := help
-.PHONY: help serve claude_test kill_claude_test open bigimages check-links sitemap clean
+.PHONY: help serve build claude_test kill_claude_test open bigimages check-links clean
 
 help: ## show this list
 	@grep -hE '^[a-z_-]+:.*##' $(MAKEFILE_LIST) | sed -E 's/:[^#]*## /|/' | column -t -s '|'
 
-serve: ## run a local preview server at http://localhost:$(PORT) (via uv)
-	uv run python3 -m http.server $(PORT)
+serve: ## run the Jekyll dev server with livereload at http://localhost:$(PORT)
+	docker compose up
 
-claude_test: ## run a preview server on $(CLAUDE_PORT), separate from `serve` so Claude's own testing never kills your dev server
-	uv run python3 -m http.server $(CLAUDE_PORT)
+build: ## build the site once into _site/
+	docker compose run --rm jekyll sh -lc 'bundle check || bundle install; bundle exec jekyll build'
+
+claude_test: ## build, then serve _site on $(CLAUDE_PORT), separate from `serve` so Claude's own testing never kills your dev server
+	docker compose run --rm jekyll sh -lc 'bundle check || bundle install; bundle exec jekyll build'
+	uv run python3 -m http.server $(CLAUDE_PORT) --directory _site
 
 kill_claude_test: ## stop the claude_test server only (never touches `serve` on $(PORT))
 	@pkill -f "[h]ttp\.server $(CLAUDE_PORT)" && echo "stopped" || echo "nothing running on $(CLAUDE_PORT)"
@@ -26,13 +31,13 @@ bigimages: ## list images over 500KB (candidates for further scaling)
 	@find assets -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -size +500k \
 	  -exec du -h {} \; | sort -rh
 
-check-links: ## grep html for local links and flag ones that don't resolve to a file
-	@grep -rhoE '(href|src)="[^":][^"]*"' *.html 2>/dev/null | sed -E 's/^(href|src)="//; s/"$$//; s/#.*$$//' \
+check-links: ## build, then flag local links in _site that don't resolve to a file
+	@$(MAKE) -s build
+	@grep -rhoE '(href|src)="[^":][^"]*"' _site --include='*.html' \
+	  | sed -E 's/^(href|src)="//; s/"$$//; s/#.*$$//' \
 	  | grep -vE '^(https?:|mailto:|/?$$)' | sed -E 's#^/##' | sort -u \
-	  | while read -r p; do [ -e "$$p" ] || echo "missing: $$p"; done
+	  | while read -r p; do [ -e "_site/$$p" ] || [ -e "_site/$${p%/}/index.html" ] || echo "missing: $$p"; done
 
-sitemap: ## regenerate sitemap.xml from the .html files on disk (keeps hand-set priorities, defaults new pages)
-	uv run python3 generate_sitemap.py
-
-clean: ## remove OS/editor cruft
+clean: ## remove build output and OS/editor cruft
+	rm -rf _site .jekyll-cache
 	find . -name '.DS_Store' -delete
