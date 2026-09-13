@@ -14,7 +14,10 @@ services:
     # `bundle exec` so the Gemfile's github-pages pins win over the Jekyll
     # baked into the image (4.2.2), which is not the version GitHub Pages runs.
     # `bundle check ||` makes the gem volume self-populating on a fresh clone.
-    command: sh -lc 'bundle check || bundle install; bundle exec jekyll serve --host 0.0.0.0 --port 8000 --livereload --livereload-port 35730 --incremental --force_polling'
+    # No --incremental: a page's title suffix comes from its section index's
+    # front matter, and incremental only re-renders files whose own source
+    # changed, so it serves stale titles. A full build is under a second.
+    command: sh -lc 'bundle check || bundle install; bundle exec jekyll serve --host 0.0.0.0 --port 8000 --livereload --livereload-port 35730 --force_polling'
 
 volumes:
   bundle:
