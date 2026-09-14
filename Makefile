@@ -87,11 +87,15 @@ check-popovers: build ## every popovertarget points at an id that exists on the 
 	  done; \
 	done; exit $$fail
 
-check-sitemap: build ## every built page appears in sitemap.xml
+check-sitemap: build ## every indexable built page appears in sitemap.xml
 	@echo "-- sitemap coverage --"; fail=0; \
+	locs=$$(grep -o '<loc>[^<]*</loc>' _site/sitemap.xml \
+	  | sed -E 's#</?loc>##g; s#https?://[^/]+##'); \
 	for f in $$(find _site -name '*.html'); do \
+	  grep -q 'name="robots" content="noindex"' "$$f" && continue; \
 	  u=$$(echo "$${f#_site}" | sed 's#index\.html$$##'); \
-	  grep -q "$$u</loc>" _site/sitemap.xml || { echo "  ERROR $$u not in sitemap"; fail=1; }; \
+	  printf '%s\n' "$$locs" | grep -qFx "$$u" \
+	    || { echo "  ERROR $$u not in sitemap"; fail=1; }; \
 	done; exit $$fail
 
 check-seo: build ## advisory: titles/descriptions longer than search results show
@@ -138,5 +142,5 @@ check-orphans: build ## advisory: unreferenced assets that have no _WxH resized 
 	done
 
 clean: ## remove build output and OS/editor cruft
-	rm -rf _site .jekyll-cache
+	rm -rf _site _site_dev .jekyll-cache
 	find . -name '.DS_Store' -delete
