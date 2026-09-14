@@ -115,27 +115,103 @@ dialog.lightbox .lightbox-close {
   cursor: pointer;
 }
 
+/* auto-fill, not auto-fit: auto-fit collapses the empty tracks and stretches
+   whatever cards exist across the whole row, so a section with one item (all
+   of products, classes and commissions) rendered it full-width, which reads as
+   a banner rather than something to tap. auto-fill keeps the empty tracks, so
+   a lone card stays the same size as a card in a full row. */
 .card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(max(220px, (100% - 3rem) / 4), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(max(220px, (100% - 3rem) / 4), 1fr));
   gap: 1rem;
 }
+/* Cards are links, so they have to look activatable. Pico's bare <article>
+   gives them a background and shadow but no interactive affordance at all,
+   and the rules below deliberately strip the underline and link colour that
+   would otherwise signal it. The hover/focus states put that signal back.
+   Padding moves from the article to the <a> so the whole tile is the hit
+   target rather than just the image and title. */
 .card-list > article {
   margin-bottom: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--pico-card-border-color);
+  transition:
+    transform var(--pico-transition),
+    border-color var(--pico-transition),
+    box-shadow var(--pico-transition);
 }
 .card-list a {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  height: 100%;
+  padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);
   text-align: center;
   text-decoration: none;
   color: inherit;
 }
 
+/* The resting state has to carry the affordance on its own: touch devices have
+   no hover, so anything revealed only on :hover is invisible there. Pico styles
+   links as underlined + primary, so the card title just adopts that and reads
+   as a link before any interaction happens. */
+.card-list a h2 {
+  color: var(--pico-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Hover-only polish, gated on a device that actually has hover. Without the
+   gate, touch browsers apply :hover on tap and leave the card stuck in the
+   hovered state until you tap elsewhere. */
+@media (hover: hover) {
+  .card-list > article:hover {
+    transform: translateY(-3px);
+    border-color: var(--pico-primary);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+  }
+  .card-list a:hover h2 {
+    color: var(--pico-primary-hover);
+  }
+}
+
+/* Press feedback, which is the touch equivalent of hover - :has is already a
+   hard dependency here (the tag filter is built on it). */
+.card-list > article:has(a:active) {
+  transform: scale(0.98);
+  border-color: var(--pico-primary);
+}
+.card-list a:active h2 {
+  color: var(--pico-primary-hover);
+}
+
+/* Keyboard focus gets the same lift hovering does. */
+.card-list > article:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--pico-primary);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+.card-list a:focus-visible {
+  outline: 3px solid var(--pico-primary);
+  outline-offset: -3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-list > article {
+    transition: none;
+  }
+  .card-list > article:hover,
+  .card-list > article:focus-within,
+  .card-list > article:has(a:active) {
+    transform: none;
+  }
+}
+
 /* CSS-only category filtering: no filter checked shows everything; each
    checked box re-shows cards carrying its tag (OR logic). Hiding a card
-   removes it from the grid entirely, so the auto-fit column sizing above
+   removes it from the grid entirely, so the auto-fill column sizing above
    already handles resizing the remaining cards. */
 .filter-wrap {
   & fieldset.tag-filters {

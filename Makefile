@@ -103,11 +103,11 @@ check-seo: build ## advisory: titles/descriptions longer than search results sho
 	  | sed 's/.*content="//; s/"$$//' \
 	  | $(UNESCAPE) | awk 'length > 160 {print "  " length " chars: " $$0}'
 
-check-external: build ## advisory: external links that fail or redirect (needs network)
-	@echo "-- external links (advisory: needs network, never fails the build) --"; \
-	blocked=$$(mktemp); \
-	grep -rhoE 'href="https?://[^"]+"' _site --include='*.html' \
-	  | sed -E 's/^href="//; s/"$$//' | sort -u \
+check-external: build ## external links: 4xx/5xx fail; redirects and bot-blocks are advisory (needs network)
+	@echo "-- external links (needs network) --"; \
+	blocked=$$(mktemp); broken=$$(mktemp); \
+	grep -rhoE '<a [^>]*href="https?://[^"]+"' _site --include='*.html' \
+	  | sed -E 's/.*href="//; s/"$$//' | sort -u \
 	  | while read -r u; do \
 	      out=$$(curl -sSL -o /dev/null --max-time 20 --retry 1 \
 	        -A 'Mozilla/5.0 (compatible; prunusdomestic-linkcheck/1.0)' \
@@ -117,14 +117,15 @@ check-external: build ## advisory: external links that fail or redirect (needs n
 	      case "$$code" in \
 	        000) echo "  ---  no response: $$u";; \
 	        403|429) h=$${u#*://}; echo "$${h%%/*}" >> "$$blocked";; \
-	        4??|5??) echo "  $$code  BROKEN: $$u";; \
+	        4??|5??) echo "  ERROR $$code BROKEN: $$u"; echo "$$u" >> "$$broken";; \
 	        *) [ "$$hops" != "0" ] && { echo "  $$code  redirects: $$u"; echo "       -> $$final"; };; \
 	      esac; \
 	    done; \
 	sort "$$blocked" | uniq -c | while read -r n h; do \
 	  echo "  403  $$h blocked $$n link(s) - bot protection, not necessarily broken"; \
 	done; \
-	rm -f "$$blocked"; true
+	n=$$(wc -l < "$$broken"); rm -f "$$blocked" "$$broken"; \
+	[ "$$n" -eq 0 ] || { echo "  ($$n dead external link(s))"; exit 1; }
 
 check-orphans: build ## advisory: unreferenced assets that have no _WxH resized copy
 	@echo "-- unreferenced assets (skipping originals that have a _WxH copy) --"; \

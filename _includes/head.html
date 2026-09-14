@@ -3,7 +3,7 @@
   finds the parent index of any item page and inherits its title suffix.
   Page-level `title_suffix` wins; pages with no section fall to site-wide.
 {%- endcomment -%}
-{%- assign sect = site.pages | where: "section", page.section | first -%}
+{%- assign sect = site.pages | where: "section", page.section | where: "layout", "section" | first -%}
 {%- assign suffix = page.title_suffix | default: sect.title_suffix | default: site.title_suffix -%}
 {%- assign seo_title = page.seo_title | default: page.title -%}
 {%- assign full_title = seo_title | append: " | " | append: suffix -%}

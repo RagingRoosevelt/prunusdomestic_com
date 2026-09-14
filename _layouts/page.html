@@ -1,7 +1,12 @@
 ---
 layout: base
 ---
-{%- assign parent = site.pages | where: "section", page.section | first %}
+{%- comment -%}
+  Filter on layout too, not just section: a section can hold more than one
+  plain page (products has retail.html alongside its index), and only the
+  index carries layout: section. Without this, `first` could pick a sibling.
+{%- endcomment -%}
+{%- assign parent = site.pages | where: "section", page.section | where: "layout", "section" | first %}
       <nav aria-label="breadcrumb">
         <ul>
           <li><a href="/">Home</a></li>
