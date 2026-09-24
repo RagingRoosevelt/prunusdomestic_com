@@ -1,0 +1,33 @@
+name: "Parkrose Hardware"
+url: https://www.parkrosehardware.com/
+categories:
+- woodworking_construction: [hardware, fasteners]
+- home_improvement: []
+locations: 
+- desc: Hazel Dell
+  street: 8002 NE 6th Avenue
+  city: Vancouver
+  state: WA
+  zip: 98665
+- desc: Portland
+  street: 10625 NE Sandy Blvd
+  city: Portland
+  state: OR
+  zip: 97220
+- desc: Vancouver
+  street: 16509 SE 1st Street
+  city: Vancouver
+  state: WA
+  zip: 98684
+- desc: Vancouver Heights
+  street: 8000 E Mill Plain Blvd
+  city: Vancouver
+  state: WA
+  zip: 98664
+- desc: West Linn
+  street: 1855 Blankenship RD
+  city: West Linn
+  state: OR
+  zip: 97068
+phone: 503.256.3103
+notes:

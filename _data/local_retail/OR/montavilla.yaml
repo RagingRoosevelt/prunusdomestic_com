@@ -1,0 +1,32 @@
+name: "Montavilla"
+url: https://www.montavillasewing.com/
+categories:
+- textiles/sewing: [machines, notions]
+locations:
+- desc: Portland
+  street: 8326 SE Stark St
+  city: Portland
+  state: OR 
+  zip: 97216 
+- desc: Beaverton
+  street: 4955 SW Western Ave
+  city: Beaverton
+  state: OR
+  zip: 97005
+- desc: Lake Oswego
+  street: 429 1st St
+  city: Lake Oswego
+  state: OR
+  zip: 97034
+- desc: Gresham
+  street: 971 NE Kelly Ave
+  city: Gresham
+  state: OR
+  zip: 97030
+- desc: Milwaukie
+  street: 9701 SE McLoughlin Blvd
+  city: Milwaukie
+  state: OR
+  zip: 97222
+phone: (503) 254-7317
+notes:

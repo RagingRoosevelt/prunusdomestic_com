@@ -1,0 +1,12 @@
+name: "Hall Tool Company"
+url: https://www.halltool.com/index.htm
+categories:
+- woodworking_construction: [tools]
+locations: 
+- desc: Grand Ave
+  street: 1724 SE Grand Ave
+  city: Portland
+  state: OR
+  zip: 97214  
+phone: +1 503 233 7634
+notes:

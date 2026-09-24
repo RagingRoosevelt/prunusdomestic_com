@@ -1,0 +1,12 @@
+name: "Northwest Wools"
+url: https://www.northwestwools.com/
+categories:
+- textiles/yarn: [knitting, crochet]
+locations: 
+- desc: 
+  street: 3524 SW Troy St
+  city: Portland
+  state: OR
+  zip: 97219
+phone: 503-244-5024
+notes:

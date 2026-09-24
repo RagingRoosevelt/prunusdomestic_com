@@ -67,7 +67,7 @@ check-links: build ## every internal link and image path resolves to a file
 	@echo "-- internal links and image paths resolve --"; \
 	out=$$(grep -rhoE '(href|src)="[^":][^"]*"' _site --include='*.html' \
 	  | sed -E 's/^(href|src)="//; s/"$$//; s/#.*$$//' \
-	  | grep -vE '^(https?:|mailto:|/?$$)' | sed -E 's#^/##' | sort -u \
+	  | grep -vE '^(https?:|mailto:|tel:|/?$$)' | sed -E 's#^/##' | sort -u \
 	  | while read -r p; do [ -e "_site/$$p" ] || [ -e "_site/$${p%/}/index.html" ] \
 	      || echo "  ERROR missing target: $$p"; done); \
 	[ -z "$$out" ] || { echo "$$out"; exit 1; }

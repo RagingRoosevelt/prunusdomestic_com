@@ -1,0 +1,12 @@
+name: "Sewlarium"
+url: https://pdxsewlarium.com/
+categories:
+- textiles/sewing: [fabric, notions, quilting/longarming]
+locations:
+ - desc: "NE Portland, Lombard and Oatman"
+   street: 3236 N Lombard St
+   city: Portland
+   state: OR
+   zip: 97217
+phone: (971) 400-0446
+notes:

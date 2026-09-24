@@ -1,0 +1,17 @@
+{%- comment -%}
+  A US phone number as a tel: link, shown as (xxx) yyy-zzzz whatever
+  punctuation it was typed with. Anything that isn't 10 digits (or 11 with a
+  leading 1) once the punctuation is gone is shown as typed.
+  Usage: {% include phone.html number=shop.phone %}
+{%- endcomment -%}
+{%- assign digits = include.number | remove: "+" | remove: "(" | remove: ")" | remove: " " | remove: "-" | remove: "." -%}
+{%- assign lead = digits | slice: 0 -%}
+{%- if digits.size == 11 and lead == "1" -%}
+  {%- assign digits = digits | slice: 1, 10 -%}
+{%- endif -%}
+{%- assign check = digits | plus: 0 | append: "" -%}
+{%- if digits.size == 10 and check == digits -%}
+<a href="tel:+1{{ digits }}">({{ digits | slice: 0, 3 }}) {{ digits | slice: 3, 3 }}-{{ digits | slice: 6, 4 }}</a>
+{%- else -%}
+<a href="tel:{{ include.number | escape }}">{{ include.number | escape }}</a>
+{%- endif -%}

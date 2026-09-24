@@ -1,0 +1,17 @@
+name: Mill End Store
+url: https://www.millendstore.com/
+categories:
+- textiles/sewing: [fabric, notions, sashiko, classes]
+locations:
+ - desc: Between Sellwood & Milwaukie, OR off of 224
+   street: 9701 S.E. McLoughlin Blvd
+   city: Milwaukie
+   state: OR
+   zip: 97222
+ - desc: Beaverton
+   street: 4955 S.W. Western Ave
+   city: Beaverton
+   state: OR
+   zip: 97005
+phone: (503)786-1234
+notes:

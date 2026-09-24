@@ -1,0 +1,11 @@
+name: "Woodcrafters"
+url: https://www.woodcrafters.us/
+categories:
+- woodworking_construction: [wood, tools, consumables]
+locations: 
+- street: 212 NE Sixth Ave
+  city: Portland
+  state: OR
+  zip: 97232
+phone: 503.231.0226
+notes:
