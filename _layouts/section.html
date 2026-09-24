@@ -27,6 +27,20 @@ layout: base
             <a href="{{ item.url }}">
               <img loading="lazy" alt="{{ item.card_alt | default: item.images[0].alt }}" src="{{ item.card_image | default: item.images[0].src }}">
               <h2>{{ item.title }}</h2>
+{%- if item.sessions %}
+{%- comment -%} Same build-time "today" rule as _includes/class_sessions.html. {%- endcomment -%}
+{%- assign today = site.time | date: "%Y%m%d" | plus: 0 -%}
+{%- assign upcoming = "" | split: "" -%}
+{%- for s in item.sessions -%}
+{%- assign d = s.date | date: "%Y%m%d" | plus: 0 -%}
+{%- if d >= today -%}{%- assign upcoming = upcoming | push: s -%}{%- endif -%}
+{%- endfor -%}
+{%- if upcoming.size > 0 -%}
+{%- assign next = upcoming | sort: "date" | first -%}
+{%- assign more = upcoming.size | minus: 1 %}
+              <p class="card-next">Next: {% include session_date.html session=next short=true %}{% if more > 0 %}<br>+{{ more }} more date{% if more > 1 %}s{% endif %}{% endif %}</p>
+{%- endif %}
+{%- endif %}
             </a>
           </article>
 {%- endfor %}

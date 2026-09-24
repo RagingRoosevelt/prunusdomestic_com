@@ -1,0 +1,26 @@
+{%- comment -%}
+  One session's date, or a range when end_date is set. A range leaves out the
+  weekday and any year or month the two ends share. short=true abbreviates
+  month and weekday names (for cards); no_weekday=true drops the weekday from a
+  single date (for past sessions). Assumes end_date is after date.
+{%- endcomment -%}
+{%- assign start = include.session.date -%}
+{%- assign end = include.session.end_date -%}
+{%- if include.short -%}{%- assign m = "%b" -%}{%- assign w = "%a, " -%}{%- else -%}{%- assign m = "%B" -%}{%- assign w = "%A, " -%}{%- endif -%}
+{%- if include.no_weekday -%}{%- assign w = "" -%}{%- endif -%}
+{%- assign md = m | append: " %-d" -%}
+{%- assign mdy = md | append: ", %Y" -%}
+{%- assign wmdy = w | append: mdy -%}
+{%- if end -%}
+{%- assign start_y = start | date: "%Y" -%}{%- assign end_y = end | date: "%Y" -%}
+{%- assign start_m = start | date: "%m" -%}{%- assign end_m = end | date: "%m" -%}
+{%- if start_y != end_y -%}
+{{ start | date: mdy }} – {{ end | date: mdy }}
+{%- elsif start_m != end_m -%}
+{{ start | date: md }} – {{ end | date: mdy }}
+{%- else -%}
+{{ start | date: md }}–{{ end | date: "%-d, %Y" }}
+{%- endif -%}
+{%- else -%}
+{{ start | date: wmdy }}
+{%- endif -%}

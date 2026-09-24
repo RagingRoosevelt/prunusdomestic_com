@@ -1,0 +1,32 @@
+{%- comment -%}
+  Splits include.sessions (list of {date, registration_url, optional time, registration_text, location, location_text}) into upcoming and past.
+  "Now" is build time: GitHub Pages only rebuilds on push, so a class moves to
+  Past on the first push after its date, not on the day itself.
+  Dates compare as YYYYMMDD integers; a class stays upcoming through its day.
+{%- endcomment -%}
+{%- assign today = site.time | date: "%Y%m%d" | plus: 0 -%}
+{%- assign sessions = include.sessions | sort: "date" -%}
+{%- assign upcoming = "" | split: "" -%}
+{%- assign past = "" | split: "" -%}
+{%- for s in sessions -%}
+{%- assign d = s.date | date: "%Y%m%d" | plus: 0 -%}
+{%- if d >= today -%}{%- assign upcoming = upcoming | push: s -%}{%- else -%}{%- assign past = past | unshift: s -%}{%- endif -%}
+{%- endfor %}
+        <h3>Upcoming</h3>
+{%- if upcoming.size > 0 %}
+        <ul>
+{%- for s in upcoming %}
+          <li>{% include session_date.html session=s %}{% if s.time %}, {{ s.time }}{% endif %}{% if s.registration_url %}<br><a href="{{ s.registration_url }}">{{ s.registration_text | default: "Sign up" }}</a>{% elsif s.registration_text %}<br>{{ s.registration_text }}{% endif %}{% if s.location %}<br><a href="https://www.google.com/maps/search/?api=1&amp;query={{ s.location | url_encode }}">{{ s.location_text | default: s.location }}</a>{% endif %}</li>
+{%- endfor %}
+        </ul>
+{%- else %}
+        <p>No classes currently scheduled.</p>
+{%- endif %}
+{%- if past.size > 0 %}
+        <h3>Past</h3>
+        <ul>
+{%- for s in past %}
+          <li>{% include session_date.html session=s no_weekday=true %}{% if s.time %}, {{ s.time }}{% endif %}{% if s.registration_url %}<br><a href="{{ s.registration_url }}">{{ s.registration_text | default: "Sign up" }}</a>{% elsif s.registration_text %}<br>{{ s.registration_text }}{% endif %}{% if s.location %}<br><a href="https://www.google.com/maps/search/?api=1&amp;query={{ s.location | url_encode }}">{{ s.location_text | default: s.location }}</a>{% endif %}</li>
+{%- endfor %}
+        </ul>
+{%- endif %}

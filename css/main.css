@@ -163,6 +163,13 @@ dialog.lightbox .lightbox-close {
   text-underline-offset: 0.15em;
 }
 
+/* Pair the title with its date line; the flex gap spaces them. Cards without
+   one keep the h2's margin, so other sections are unchanged. */
+.card-list a h2:has(+ .card-next),
+.card-list .card-next {
+  margin-bottom: 0;
+}
+
 /* Hover-only polish, gated on a device that actually has hover. Without the
    gate, touch browsers apply :hover on tap and leave the card stuck in the
    hovered state until you tap elsewhere. */
