@@ -3,7 +3,8 @@ url: https://www.woodcrafters.us/
 categories:
 - woodworking_construction: [wood, tools, consumables]
 locations: 
-- street: 212 NE Sixth Ave
+- desc: Central Eastside
+  street: 212 NE Sixth Ave
   city: Portland
   state: OR
   zip: 97232

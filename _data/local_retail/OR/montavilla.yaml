@@ -1,9 +1,9 @@
 name: "Montavilla"
 url: https://www.montavillasewing.com/
 categories:
-- textiles/sewing: [machines, notions]
+- sewing: [machines, notions]
 locations:
-- desc: Portland
+- desc: near Mall 205
   street: 8326 SE Stark St
   city: Portland
   state: OR 

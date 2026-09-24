@@ -1,9 +1,9 @@
 name: "Northwest Wools"
 url: https://www.northwestwools.com/
 categories:
-- textiles/yarn: [knitting, crochet]
+- fibercraft: [knitting, crochet]
 locations: 
-- desc: 
+- desc: Multnomah Village
   street: 3524 SW Troy St
   city: Portland
   state: OR

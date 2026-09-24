@@ -1,0 +1,93 @@
+name: Suggest a local shop
+description: Suggest a shop for the Local PDX directory. Just answer in plain words; no special formatting needed.
+title: "[New shop] "
+labels: ["local-retail", "new-shop"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping people find local shops! Fill in whatever you know; only the shop's name, what it sells, and its city are required. We'll look up anything missing.
+
+  - type: input
+    id: name
+    attributes:
+      label: Shop name
+      placeholder: Mill End Store
+    validations:
+      required: true
+
+  - type: input
+    id: website
+    attributes:
+      label: Website
+      description: The shop's own site, or a social media page if that's all they have.
+      placeholder: https://www.example.com/
+
+  - type: textarea
+    id: offerings
+    attributes:
+      label: What does the shop sell or offer?
+      description: A few words or a list is plenty.
+      placeholder: |
+        Fabric, notions, sewing machines, quilting classes
+    validations:
+      required: true
+
+  - type: input
+    id: phone
+    attributes:
+      label: Phone number
+      placeholder: (503) 555-0123
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Location
+        If the shop has more than one location, put the main one here and the rest in "Other locations" below.
+
+  - type: input
+    id: area
+    attributes:
+      label: Neighborhood or landmark
+      description: A short way to describe where it is.
+      placeholder: SE Portland, Division and 26th
+
+  - type: input
+    id: street
+    attributes:
+      label: Street address
+      placeholder: 123 SE Example St
+
+  - type: input
+    id: city
+    attributes:
+      label: City
+      placeholder: Portland
+    validations:
+      required: true
+
+  - type: input
+    id: state
+    attributes:
+      label: State
+      placeholder: OR
+
+  - type: input
+    id: zip
+    attributes:
+      label: ZIP code
+      placeholder: "97202"
+
+  - type: textarea
+    id: other_locations
+    attributes:
+      label: Other locations
+      description: One location per line, however you'd normally write an address.
+      placeholder: |
+        Beaverton: 456 SW Example Ave, Beaverton, OR 97005
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Hours quirks, what makes it worth a visit, whether you're connected to the shop, etc.

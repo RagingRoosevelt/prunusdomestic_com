@@ -1,7 +1,7 @@
 name: "Pendleton Woolen Mill Store"
 url: https://www.pendleton-usa.com/storedetails/?storeID=01160%20060002
 categories:
-- textiles/sewing: [fabric, notions]
+- sewing: [fabric, notions]
 locations:
  - desc: Milwaukie
    street: 8500 SE McLoughlin

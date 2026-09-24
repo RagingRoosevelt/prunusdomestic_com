@@ -1,0 +1,30 @@
+name: Update a shop's details
+description: Something listed for a shop in the Local PDX directory is wrong or out of date.
+title: "[Update shop] <State>, <City>: <Shop name>"
+labels: ["local-retail", "shop-update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please edit the title above** to the shop's state, city, and name, e.g. `[Update shop] OR, Milwaukie: Mill End Store`.
+
+  - type: textarea
+    id: changes
+    attributes:
+      label: What needs to change?
+      description: What the directory says now, and what it should say.
+      placeholder: |
+        Phone number is now (503) 555-0123.
+        They've added quilting classes.
+        They have a new location.
+        One of their locations has changed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Where can we confirm this?
+      description: A link to the shop's website or social media post, a photo of a sign, or similar. You can drag images straight into this box.
+    validations:
+      required: true

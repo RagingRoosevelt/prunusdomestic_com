@@ -1,0 +1,41 @@
+name: Report a shop closing
+description: A shop in your local area has closed or is closing.
+title: "[Shop closing] <State>, <City>: <Shop name>"
+labels: ["local-retail", "shop-closing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please edit the title above** to the shop's state, city, and name, e.g. `[Shop closing] OR, Milwaukie: Mill End Store`.
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: What's happening?
+      options:
+        - Closed for good
+        - Closing soon
+        - One location is closing (others staying open)
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: When?
+      description: The closing or moving date, if you know it.
+      placeholder: March 31, 2026
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Which location, or anything else we should know.
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Where can we confirm this?
+      description: A link to the shop's announcement, a news story, a photo of a sign, or similar. You can drag images straight into this box.
+    validations:
+      required: true

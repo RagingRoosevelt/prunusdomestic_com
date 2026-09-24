@@ -1,9 +1,9 @@
 name: Mill End Store
 url: https://www.millendstore.com/
 categories:
-- textiles/sewing: [fabric, notions, sashiko, classes]
+- sewing: [fabric, notions, sashiko, classes]
 locations:
- - desc: Between Sellwood & Milwaukie, OR off of 224
+ - desc: Milwaukie
    street: 9701 S.E. McLoughlin Blvd
    city: Milwaukie
    state: OR

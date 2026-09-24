@@ -1,9 +1,9 @@
 name: "Sewlarium"
 url: https://pdxsewlarium.com/
 categories:
-- textiles/sewing: [fabric, notions, quilting/longarming]
+- sewing: [fabric, notions, quilting.long_arming]
 locations:
- - desc: "NE Portland, Lombard and Oatman"
+ - desc: NE Portland
    street: 3236 N Lombard St
    city: Portland
    state: OR

@@ -1,9 +1,9 @@
 name: Close Knit
 url: https://closeknitportland.com/
 categories:
-- textiles/yarn: [knitting, crochet]
+- fibercraft: [knitting, crochet]
 locations: 
-- desc: Alberta St
+- desc: NE Portland
   street: 2140 NE Alberta St
   city: Portland
   state: OR

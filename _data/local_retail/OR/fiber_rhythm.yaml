@@ -1,10 +1,9 @@
 name: Fiber Rhythm
 url: https://fiberrhythm.com/
 categories:
-- textiles/yarn: [knitting, crochet]
-- textiles/weaving: []
+- fibercraft: [knitting, crochet, weaving]
 locations: 
-- desc: Division
+- desc: Central Eastside
   street: 2505 SE 11th Ave, Suite 119
   city: Portland
   state: OR

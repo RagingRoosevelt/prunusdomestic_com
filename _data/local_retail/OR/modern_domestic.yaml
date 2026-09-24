@@ -1,9 +1,9 @@
 name: "Modern Domestic"
 url: https://moderndomesticpdx.com/
 categories:
-- textiles/sewing: [fabric, notions, machines, quilting/longarming]
+- sewing: [fabric, notions, machines, quilting.long_arming]
 locations:
- - desc: "NE Portland, MLK and Alberta"
+ - desc: NE Portland
    street: 422 NE Alberta Street
    city: Portland
    state: OR

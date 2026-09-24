@@ -1,9 +1,9 @@
 name: Starlight Knitting Society
 url: https://starlightknittingsociety.com/
 categories:
-- textiles/yarn: [crochet, knitting]
+- fibercraft: [crochet, knitting]
 locations: 
-- desc: Woodstock
+- desc: SE Portland
   street: 7028 SE 52nd Ave.
   city: Portland
   state: OR

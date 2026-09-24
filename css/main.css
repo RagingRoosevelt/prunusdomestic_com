@@ -457,6 +457,90 @@ section {
 }
 /* Local retail: category filter tree, and shop cards grouped in one boxed
    section per root category. */
+/* "Send a suggestion" opens a dialog, so it's a button, but it sits in a
+   sentence and should read as a link. */
+button.link-button {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--pico-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* Same popover-dialog fix as dialog.lightbox above: Pico hides any dialog
+   without [open], which a popover-opened one never gets. */
+dialog#retail-suggest:popover-open {
+  display: flex;
+}
+#retail-suggest {
+  & .retail-suggest-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    & h2 { margin: 0; }
+  }
+  & fieldset label { display: block; }
+  /* Only update/closing are about an existing shop. */
+  & form:not(:has(input[value="update_shop.yml"]:checked, input[value="shop_closing.yml"]:checked)) .retail-suggest-shop {
+    display: none;
+  }
+}
+
+/* Filter button and fly-over sit outside any <article>, so they'd get
+   Pico's default font instead of the site's. */
+#retail-filters-open,
+#retail-filters {
+  font-family: "BrassMono";
+}
+/* Filter fly-over: the UA popover styles centre it and size it to its
+   content; this pins it full height to the right edge instead. */
+#retail-filters {
+  inset: 0 0 0 auto;
+  margin: 0;
+  width: min(46rem, 100vw);
+  height: 100dvh;
+  max-height: none;
+  padding: 1rem;
+  overflow-y: auto;
+  /* Scrolling past the end of the panel shouldn't scroll the page behind. */
+  overscroll-behavior: contain;
+  border: none;
+  color: var(--pico-color);
+  background: var(--pico-background-color);
+  box-shadow: -0.5rem 0 1rem rgba(0, 0, 0, 0.25);
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  & .retail-filters-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    & h2 { margin: 0; }
+  }
+  /* Location | category side by side, stacking once a column would drop
+     under 14rem (phones), so long labels don't wrap into a sliver. */
+  & .retail-filters-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem 2rem;
+    align-items: start;
+  }
+  & .retail-filters-close {
+    padding: 0 0.5rem;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+}
+#retail-filters-open {
+  margin-bottom: 1rem;
+}
 .retail-filter ul {
   padding-left: 1.25rem;
 }

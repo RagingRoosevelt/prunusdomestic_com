@@ -4,7 +4,8 @@ categories:
 - woodworking_construction: [hardware, fasteners, tools]
 - home_improvement: []
 locations: 
-- street: 200 SE Stark St
+- desc: Central Eastside
+  street: 200 SE Stark St
   city: Portland
   state: OR
   zip: 97214

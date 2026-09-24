@@ -1,7 +1,7 @@
 name: "For Yarn’s Sake"
 url: https://www.foryarnssake.com/
 categories:
-- textiles/yarn: [knitting, crochet]
+- fibercraft: [knitting, crochet]
 locations: 
 - desc: Beaverton
   street: 3830 SW Hall Blvd

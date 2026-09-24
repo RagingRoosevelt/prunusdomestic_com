@@ -1,7 +1,7 @@
 name: "Weird Sisters"
 url: https://www.weirdsistersyarn.com/
 categories:
-- textiles/knitting: []
+- fibercraft: [knitting, crochet]
 locations:
 - desc: St Johns
   street: 8836 N Lombard St

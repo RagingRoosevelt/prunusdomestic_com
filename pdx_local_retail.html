@@ -3,65 +3,388 @@ layout: base
 section: pdx_local_retail
 title: Local PDX Fiber &amp; Hardware Shops
 description: A directory of local Portland-area sewing, fiber arts, and hardware shops, curated by Prunus Domestic.
+# Display names for category paths, keyed by the full path. Anything not
+# listed shows its last segment with _ as spaces, in title case. Used for the
+# group headings here and the filter tree in the script below.
+category_labels:
+  woodworking_construction: Woodworking & Construction
+# Metro regions and the "state.city" locations in each, with city exactly as
+# typed in a shop's locations. For the location filter: both the city and its
+# region show.
+metro_regions:
+- OR.Portland Metro: [OR.Milwaukie, OR.Portland, OR.Beaverton, OR.Gresham, WA.Vancouver, OR.Forest Grove, OR.Lake Oswego, OR.West Linn]
 ---
+{%- comment -%}
+  Shops come from _data/local_retail/<state>/<shop>.yaml; the state folders
+  are only for upkeep, so they're flattened here. Categories aren't declared
+  anywhere: the groups, and the filter tree the script builds, come from the
+  paths the shops use. Each shop is grouped under the root of its *first*
+  category. Picking a category hides the shops with no path at or under it,
+  and any group left empty. Labels are the path text, _ as spaces, title case.
+{%- endcomment -%}
+{%- assign shops = "" | split: "" -%}
+{%- for state in site.data.local_retail -%}
+  {%- for entry in state[1] -%}
+    {%- assign shops = shops | push: entry[1] -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- assign shops = shops | sort_natural: "name" -%}
+{%- assign roots = "" | split: "" -%}
+{%- for shop in shops -%}
+  {%- for pair in shop.categories.first -%}
+    {%- assign root = pair[0] | split: "." | first -%}
+    {%- assign roots = roots | push: root -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- assign roots = roots | uniq | sort_natural %}
+      <h1>Local PDX businesses</h1>
       <article>
-        <h1>Local PDX businesses</h1>
         I'm trying shop as much as I can from local businesses.  I've struggled on
         this mission because I've found it hard to discover local shops.  I'd like
         to help you have an easier time of that by indexing local shops that I've
         discovered.  If I'm missing something that should be on here, please let me
-        know: <a href="mailto:local_pdx@prunusdomestic.com">local_pdx@prunusdomestic.com</a>
-
-        <h2>TOC</h2>
-        <ul>
-          <li>Craft
-            <ul>
-              <li><a href="#sewing">Sewing</a></li>
-              <li><a href="#knit_and_crochet">Knit &amp; Crochet</a></li>
-              <li>General</li>
-            </ul>
-          </li>
-          <li><a href="#hardware_and_tools">Hardware &amp; Construction Tools</a></li>
-        </ul>
-        <section id="sewing">
-          <h2>Sewing</h2>
-          <p><a href="https://www.boltfabricboutique.com/" target="_blank" aria-label="Link to Bolt Fabric Boutique opens in a new tab">
-            Bolt Fabric Boutique</a> - NE Portland, Alberta and 29th</p>
-          <p><a href="http://featheryournestquiltstore.com/" target="_blank" aria-label="Link to Feather Your Next opens in a new tab">Feather Your Next</a> - Gresham, OR</p>
-          <p><a href="https://www.millendstore.com/" target="_blank" aria-label="Link to Mill End Store opens in a new tab">
-            Mill End Store</a> - Between Sellwood &amp; Milwaukie, OR off of 224</p>
-          <p><a href="https://moderndomesticpdx.com/" target="_blank" aria-label="Link to Modern Domestic opens in a new tab">
-            Modern Domestic</a> - NE Portland, MLK and Alberta</p>
-          <p><a href="https://www.montavillasewing.com/" target="_blank" aria-label="Link to Montavilla opens in a new tab">Montavilla</a> - Several locations</p>
-          <p><a href="https://www.josephinesdrygoods.com/" target="_blank" aria-label="Link to Josephine Dry Goods opens in a new tab">
-            Josephine Dry Goods</a> - SE Portland, Division and 26th</p>
-    	  <p><a href="https://www.pioneerquiltshop.com/" target="_blank" aria-label="Link to Pioneer Quilt Shop opens in a new tab">Pioneer Quilts</a> - Oak Grove, OR</p>
-          <p><a href="https://www.sewcialstudies.com/" target="_blank" aria-label="Link to Sewcial Studies opens in new tab">
-            Sewcial Studies</a> - Milwaukie, OR</p>
-          <p><a href="https://pdxsewlarium.com/" target="_blank" aria-label="Link to Sewlarium opens in a new tab">
-            Sewlarium</a> - NE Portland, Lombard and Oatman</p>
-          <p><a href="https://www.pendleton-usa.com/storedetails/?storeID=01160%20060002" target="_blank" aria-label="Link to Pendleton Woolen Mill Store opens in a new tab">
-            Pendleton Woolen Mill Store</a> - 99E and Tacoma</p>
-        </section>
-        <section id="knit_and_crochet">
-          <h2>Knit &amp; Crochet</h2>
-          <p>Northwest Wools</p>
-          <p>Fiber Rhythm</p>
-          <p>Close Knit</p>
-          <p>For Yarn’s Sake</p>
-          <p>Hook and Needle</p>
-          <p>Knotty Lamb</p>
-          <p>Ritual Dyes</p>
-          <p>Starlight Knitting Society</p>
-          <p>Weird Sisters</p>
-        </section>
-        <section id="hardware_and_tools">
-          <h2>Hardware &amp; Construction Tools</h2>
-          <p>Parkrose Hardware</p>
-          <p>Woodcrafters</p>
-          <p>Winks</p>
-          <p>Charles H Day</p>
-          <p>Snyder Tool</p>
-          <p>Hall Tool Company</p>
-        </section>
+        know: <button type="button" class="link-button" popovertarget="retail-suggest">send a suggestion or correction</button>.
       </article>
+{%- comment -%}
+  A plain GET form to GitHub's new-issue page, so the fields become the
+  query string: `template` picks the issue form in .github/ISSUE_TEMPLATE/,
+  and `title` prefills its title. The shop list is hidden by CSS when a new
+  shop is picked. The script sets `title` from the picked shop; without JS
+  the form still opens the right template, just with its default title.
+  Shop values are "State, City: Name" from the first location with a city,
+  the format those templates ask for.
+{%- endcomment %}
+      <dialog id="retail-suggest" popover>
+        <article>
+          <div class="retail-suggest-head">
+            <h2>Suggest a change</h2>
+            <button type="button" rel="prev" popovertarget="retail-suggest" popovertargetaction="hide" aria-label="Close"></button>
+          </div>
+          <form action="https://github.com/RagingRoosevelt/prunusdomestic_com/issues/new" method="get" target="_blank">
+            <fieldset>
+              <legend>What would you like to do?</legend>
+              <label><input type="radio" name="template" value="new_shop.yml" required> Suggest a new shop</label>
+              <label><input type="radio" name="template" value="update_shop.yml"> Update a shop's details</label>
+              <label><input type="radio" name="template" value="shop_closing.yml"> Report a shop closing</label>
+            </fieldset>
+            <label class="retail-suggest-shop">
+              Which shop?
+              <select id="retail-suggest-shop">
+                <option value="">Choose a shop</option>
+{%- for shop in shops -%}
+  {%- assign loc = shop.locations | where_exp: "l", "l.city" | first -%}
+  {%- if loc -%}
+    {%- capture where %}{{ loc.state }}, {{ loc.city }}{% endcapture -%}
+  {%- else -%}
+    {%- assign where = "<State>, <City>" -%}
+  {%- endif %}
+                <option data-shop="{{ forloop.index0 }}" value="{{ where | append: ': ' | append: shop.name | escape }}">{{ shop.name | escape }}{% if loc %} ({{ loc.city | escape }}, {{ loc.state | escape }}){% endif %}</option>
+{%- endfor %}
+              </select>
+            </label>
+            <input type="hidden" name="title" disabled>
+            <p><small>This opens GitHub in a new tab, where you'll need to sign in to submit.
+              No GitHub account? Email <a href="mailto:shop_local@prunusdomestic.com">shop_local@prunusdomestic.com</a> instead.</small></p>
+            <button type="submit">Continue on GitHub</button>
+          </form>
+        </article>
+      </dialog>
+
+        {%- comment -%}
+          The filters live in a popover fly-over; the browser handles opening,
+          Escape and click-outside to close. The button is hidden until the
+          script runs: it builds the category and location radios, and
+          without JS there's nothing to filter with.
+        {%- endcomment %}
+        <button type="button" id="retail-filters-open" popovertarget="retail-filters" hidden>Filter shops</button>
+        <div id="retail-filters" popover>
+          <div class="retail-filters-head">
+            <h2>Filter shops</h2>
+            <button type="button" class="retail-filters-close" popovertarget="retail-filters" popovertargetaction="hide" aria-label="Close filters">&times;</button>
+          </div>
+          <div class="retail-filters-cols">
+            <fieldset id="retail-location" class="retail-filter">
+              <legend>Location</legend>
+              <ul>
+                <li><label><input type="radio" name="location" value="" checked> All</label></li>
+              </ul>
+            </fieldset>
+            <fieldset id="retail-filter" class="retail-filter">
+              <legend>Category</legend>
+              <ul>
+                <li><label><input type="radio" name="category" value="" checked> All</label></li>
+              </ul>
+            </fieldset>
+          </div>
+        </div>
+
+        <div id="retail-shops">
+{%- for root in roots -%}
+{%- comment -%} Same rule as the script's `label`. {%- endcomment -%}
+{%- assign raw_words = root | replace: "_", " " | split: " " -%}
+{%- assign words = "" | split: "" -%}
+{%- for w in raw_words -%}
+  {%- capture word %}{{ w | slice: 0 | upcase }}{{ w | slice: 1, w.size }}{% endcapture -%}
+  {%- assign words = words | push: word -%}
+{%- endfor -%}
+{%- assign label = words | join: " " -%}
+{%- assign label = page.category_labels[root] | default: label %}
+          <section>
+            <h2>{{ label | escape }}</h2>
+            <div class="shop-list">
+{%- for shop in shops -%}
+  {%- assign shop_root = nil -%}
+  {%- assign first = shop.categories.first -%}
+  {%- for pair in first -%}{%- assign shop_root = pair[0] | split: "." | first -%}{%- endfor -%}
+  {%- if shop_root == root %}
+          <article data-shop="{{ forloop.index0 }}">
+{%- if shop.url %}
+            <h3><a href="{{ shop.url }}" target="_blank" aria-label="Link to {{ shop.name | escape }} opens in a new tab">{{ shop.name | escape }}</a></h3>
+{%- else %}
+            <h3>{{ shop.name | escape }}</h3>
+{%- endif -%}
+{%- comment -%}
+  Closed, the summary lists each location's short desc (or its street, if
+  it has no desc). Open, it swaps to
+  "Address(es)" and the full street addresses show below (css/main.css).
+  With no street address to reveal there's nothing to open, so descs only.
+{%- endcomment -%}
+{%- assign streets = shop.locations | where_exp: "loc", "loc.street" -%}
+{%- if streets.size > 0 %}
+            <details>
+              <summary><span class="shop-descs">{% for loc in shop.locations %}<span>{{ loc.desc | default: loc.street | escape }}</span>{% endfor %}</span><span class="shop-open">Address{% if streets.size > 1 %}es{% endif %}</span></summary>
+              <ul>
+{%- for loc in streets %}
+                <li><address>{{ loc.street | escape }}<br>{{ loc.city | escape }}, {{ loc.state }} {{ loc.zip }}</address></li>
+{%- endfor %}
+              </ul>
+            </details>
+{%- else -%}
+{%- for loc in shop.locations %}{% if loc.desc %}
+            <p>{{ loc.desc | escape }}</p>
+{%- endif %}{% endfor -%}
+{%- endif -%}
+{%- if shop.phone %}
+            {% include phone.html number=shop.phone %}
+{%- endif -%}
+{%- if shop.notes %}
+            <p>{{ shop.notes | escape }}</p>
+{%- endif %}
+          </article>
+  {%- endif -%}
+{%- endfor %}
+            </div>
+          </section>
+{%- endfor %}
+        </div>
+      <script type="module">
+        // Cards are rendered above; this is the same data for the filter.
+        // data-shop on each card is its index into `shops`.
+        const shops = {{ shops | jsonify }}
+        // category_labels from the front matter.
+        const labels = {{ page.category_labels | jsonify }} ?? {}
+        // metro_regions from the front matter: [{"state.metro": ["state.city", ...]}].
+        const metroRegions = {{ page.metro_regions | jsonify }} ?? []
+
+        const filter = document.getElementById("retail-filter")
+        const locationFilter = document.getElementById("retail-location")
+        const openButton = document.getElementById("retail-filters-open")
+        const shopSelect = document.getElementById("retail-suggest-shop")
+        const list = document.getElementById("retail-shops")
+
+        // `categories: [{"textiles.sewing": ["fabric"]}]` -> ["textiles.sewing",
+        // "textiles.sewing.fabric"]. A shop matches a category if any path is
+        // that category or sits under it, so "textiles" finds ...fabric too.
+        // Stray dots ("textiles.yarn.") would make empty segments, which
+        // have no label and match nothing, so they're dropped here.
+        const clean = path => String(path).split(".").filter(Boolean).join(".")
+        const paths = shops.map(shop => (shop.categories ?? []).flatMap(c =>
+          Object.entries(c).flatMap(([key, leaves]) =>
+            [key, ...(leaves ?? []).map(leaf => `${key}.${leaf}`)]).map(clean)).filter(Boolean))
+        const matches = (i, sel) =>
+          paths[i].some(p => p === sel || p.startsWith(sel + "."))
+
+        // Nest every path the shops use: Map of segment -> Map of children.
+        const tree = new Map()
+        for (const path of new Set(paths.flat())) {
+          let node = tree
+          for (const seg of path.split(".")) {
+            if (!node.has(seg)) node.set(seg, new Map())
+            node = node.get(seg)
+          }
+        }
+        // "woodworking_construction" -> "Woodworking Construction". Only first
+        // letters change, so "DIY" or "iPad" keep the rest as typed.
+        const titleCase = seg => seg.replaceAll("_", " ").split(" ")
+          .map(w => w && w[0].toUpperCase() + w.slice(1)).join(" ")
+        const label = (path, seg) => labels[path] ?? titleCase(seg)
+
+        function radio(name, value, text, children = []) {
+          const li = document.createElement("li")
+          const label = li.appendChild(document.createElement("label"))
+          const input = label.appendChild(document.createElement("input"))
+          input.type = "radio"
+          input.name = name
+          input.value = value
+          label.append(" " + text)
+          if (children.length) li.appendChild(document.createElement("ul")).append(...children)
+          return li
+        }
+        const byName = ([a], [b]) => a.localeCompare(b)
+
+        function build(node, parent) {
+          return [...node].sort(byName).map(([seg, children]) => {
+            const path = parent ? `${parent}.${seg}` : seg
+            return radio("category", path, label(path, seg), build(children, path))
+          })
+        }
+        filter.querySelector("ul").append(...build(tree, ""))
+
+        // Location tree: state > metro region > city, or state > city for a
+        // city in no region. Places are "state.city" as typed in the shop
+        // files (and "state.region"). A city sits under its region's state,
+        // and when that isn't its own (Vancouver, WA is in OR.Portland Metro)
+        // it's also listed on its
+        // own under its own state. A shop's places are the city plus every
+        // tree node above any listing of it, so picking any node shows exactly
+        // the shops listed beneath it. Locations with no city aren't
+        // anywhere, so any location pick hides them.
+        const regionOf = Object.fromEntries(metroRegions.flatMap(r =>
+          Object.entries(r).flatMap(([region, cities]) => (cities ?? []).map(c => [c, region]))))
+        // Split at the first "." only: a city can have its own ("St. Helens").
+        const stateOf = place => place.slice(0, place.indexOf("."))
+        const nameOf = place => place.slice(place.indexOf(".") + 1)
+        const cityPlaces = shops.map(shop => (shop.locations ?? [])
+          .filter(loc => loc.state && loc.city)
+          .map(loc => `${loc.state}.${loc.city}`))
+        const places = cityPlaces.map(cities => cities.flatMap(city => {
+          const region = regionOf[city]
+          return [city, stateOf(city), ...(region ? [region, stateOf(region)] : [])]
+        }))
+
+        // Map of state -> Map of (region or city) -> [cities in that region].
+        const states = new Map()
+        const add = (stateName, place, city) => {
+          const state = states.get(stateName) ?? new Map()
+          states.set(stateName, state)
+          state.set(place, city ? [...(state.get(place) ?? []), city] : [])
+        }
+        for (const city of new Set(cityPlaces.flat())) {
+          const region = regionOf[city]
+          if (region) add(stateOf(region), region, city)
+          if (!region || stateOf(region) !== stateOf(city)) add(stateOf(city), city)
+        }
+        // Regions (the entries with member cities) before stand-alone cities.
+        const regionsFirst = (a, b) => (b[1].length > 0) - (a[1].length > 0) || byName(a, b)
+        // "OR.Milwaukie" under OR -> "Milwaukie"; "WA.Vancouver" under OR ->
+        // "Vancouver, WA"; "OR.Portland Metro" -> "Portland Metro".
+        const placeLabel = (place, state) =>
+          stateOf(place) === state ? nameOf(place) : `${nameOf(place)}, ${stateOf(place)}`
+        locationFilter.querySelector("ul").append(...[...states].sort(byName).map(([state, children]) =>
+          radio("location", state, state, [...children].sort(regionsFirst).map(([place, members]) =>
+            radio("location", place, placeLabel(place, state),
+              members.map(city => [placeLabel(city, state), city]).sort(byName)
+                .map(([text, city]) => radio("location", city, text)))))))
+
+        function apply() {
+          const cat = filter.querySelector("input:checked")?.value ?? ""
+          const loc = locationFilter.querySelector("input:checked")?.value ?? ""
+          // The panel is closed while browsing, so the button says what's on.
+          const on = [filter, locationFilter]
+            .map(f => f.querySelector("input:checked"))
+            .filter(input => input?.value)
+            .map(input => input.parentElement.textContent.trim())
+          openButton.textContent = on.length ? `Filters: ${on.join(", ")}` : "Filter shops"
+          const shows = i => (cat === "" || matches(i, cat)) && (loc === "" || places[i].includes(loc))
+          for (const section of list.querySelectorAll("section")) {
+            let any = false
+            for (const card of section.querySelectorAll("article[data-shop]")) {
+              card.hidden = !shows(card.dataset.shop)
+              any ||= !card.hidden
+            }
+            section.hidden = !any
+          }
+          // The suggestion dialog's shop list follows the filters too. Some
+          // browsers (iOS Safari) ignore `hidden` on <option>, so it's
+          // disabled as well. A picked shop that's filtered out is unpicked.
+          for (const option of shopSelect.querySelectorAll("option[data-shop]")) {
+            option.hidden = option.disabled = !shows(option.dataset.shop)
+          }
+          if (shopSelect.selectedOptions[0]?.disabled) {
+            shopSelect.value = ""
+            shopSelect.dispatchEvent(new Event("change", {bubbles: true}))
+          }
+        }
+        // Filters can come from the address (?category=...&location=..., full
+        // paths like "textiles.sewing" or "OR.Portland_Metro"), so a filtered
+        // view can be shared, and the location pick is also remembered across
+        // visits in storage. On load the address wins over storage for the
+        // location, but storage is only written when the visitor picks a
+        // location themselves, so following a shared link doesn't replace
+        // their own saved pick. A value with no matching radio (renamed or no
+        // shops left) is ignored. Values from outside (address, storage) are
+        // matched ignoring case and treating _ as a space, since the address
+        // writes spaces as _ and people type links by hand. Storage can be
+        // blocked or missing (private
+        // windows, locked-down browsers), so every access is guarded and the
+        // page just goes without it.
+        const LOCATION_KEY = "local-retail-location"
+        const params = new URLSearchParams(window.location.search)
+        const loose = value => value.toLowerCase().replaceAll("_", " ")
+        const check = (fieldset, value) => {
+          const input = value && [...fieldset.querySelectorAll("input")]
+            .find(i => i.value && loose(i.value) === loose(value))
+          if (input) input.checked = true
+          return Boolean(input)
+        }
+        check(filter, params.get("category"))
+        if (!check(locationFilter, params.get("location"))) {
+          try { check(locationFilter, localStorage.getItem(LOCATION_KEY)) } catch {}
+        }
+        locationFilter.addEventListener("change", event => {
+          try {
+            if (event.target.value) localStorage.setItem(LOCATION_KEY, event.target.value)
+            else localStorage.removeItem(LOCATION_KEY)
+          } catch {}
+        })
+        // replaceState, not pushState: each pick shouldn't add a Back step.
+        function updateAddress() {
+          const url = new URL(window.location)
+          for (const [name, fieldset] of [["category", filter], ["location", locationFilter]]) {
+            const value = fieldset.querySelector("input:checked")?.value
+            // "OR.Portland Metro" -> "OR.Portland_Metro": no + or %20.
+            if (value) url.searchParams.set(name, value.replaceAll(" ", "_"))
+            else url.searchParams.delete(name)
+          }
+          history.replaceState(history.state, "", url)
+        }
+        filter.addEventListener("change", updateAddress)
+        locationFilter.addEventListener("change", updateAddress)
+
+        filter.addEventListener("change", apply)
+        locationFilter.addEventListener("change", apply)
+        // Back/forward can restore a checked radio without firing "change".
+        addEventListener("pageshow", apply)
+        openButton.hidden = false
+
+        // Suggestion dialog: always send a title, so it doesn't depend on
+        // GitHub finding the template's default. Prefixes match the `title:`
+        // in each .github/ISSUE_TEMPLATE file; with no shop picked, the
+        // template's placeholder is kept for the visitor to fill in.
+        const suggest = document.getElementById("retail-suggest")
+        const suggestForm = suggest.querySelector("form")
+        const TITLE_PREFIX = {
+          "new_shop.yml": "[New shop]",
+          "update_shop.yml": "[Update shop]",
+          "shop_closing.yml": "[Shop closing]",
+        }
+        suggestForm.addEventListener("change", () => {
+          const template = suggestForm.elements.template.value
+          const title = suggestForm.elements.title
+          title.disabled = !TITLE_PREFIX[template]
+          const shop = template === "new_shop.yml" ? "" : shopSelect.value || "<State>, <City>: <Shop name>"
+          title.value = `${TITLE_PREFIX[template]} ${shop}`
+        })
+        // The form opens GitHub in a new tab; close the dialog behind it.
+        suggestForm.addEventListener("submit", () => suggest.hidePopover())
+      </script>

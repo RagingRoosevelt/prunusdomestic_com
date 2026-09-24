@@ -1,9 +1,9 @@
 name: Josephine Dry Goods
 url: https://www.josephinesdrygoods.com/
 categories:
-- textiles/sewing: [fabric, notions]
+- sewing: [fabric, notions]
 locations:
- - desc: SE Portland, Division and 26th
+ - desc: SE Portland
    street: 2609 SE Clinton Street
    city: Portland
    state: OR

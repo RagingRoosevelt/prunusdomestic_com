@@ -1,9 +1,9 @@
 name: "Pioneer Quilts"
 url: https://www.pioneerquiltshop.com/
 categories:
-- textiles/sewing: [fabric, quilting, notions]
+- sewing: [fabric, quilting, notions]
 locations:
- - desc: "Oak Grove, OR"
+ - desc: Oak Grove
    street: 3101 SE Courtney
    city: Portland
    state: OR

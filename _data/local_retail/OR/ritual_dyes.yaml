@@ -1,11 +1,10 @@
 name: "Ritual Dyes"
 url: https://ritualdyes.com/
 categories:
-- textiles/yarn: [crochet, knitting]
-- textiles/weaving: []
+- fibercraft: [crochet, knitting, weaving]
 locations: 
 - desc: Portland
-  street: 3300 SE Belmont Street
+  street: SE Portland
   city: Portland
   state: OR
   zip: 97214
