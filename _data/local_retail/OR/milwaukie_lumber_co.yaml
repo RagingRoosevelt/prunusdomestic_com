@@ -1,0 +1,23 @@
+name: Milwaukie Lumber Co
+url: https://www.milwaukielumber.com/
+categories:
+- woodworking_construction: [lumber, fasteners, hardware, tools]
+locations: 
+- desc: Milwaukie
+  street: 10998 SE 21st Ave
+  city: Milwaukie
+  state: OR
+  zip: 97222
+  phone: (503) 654-5417
+- desc: Vancouver
+  street: 13113 NE Fourth Plain Blvd
+  city: Vancouver
+  state: WA
+  zip: 98682
+  phone: (360) 256-8000
+- desc: near Mall 205
+  street: 8048 SE Stark St
+  city: Portland
+  state: OR
+  zip: 97215
+  phone: (503) 253-0000

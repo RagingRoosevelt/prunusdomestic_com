@@ -1,32 +1,36 @@
 name: "Montavilla Sewing"
 url: https://www.montavillasewing.com/
 categories:
-- sewing: [machines, notions]
+- sewing: [machines, notions, machine_repair]
 locations:
 - desc: near Mall 205
   street: 8326 SE Stark St
   city: Portland
   state: OR 
   zip: 97216 
+  phone: (503) 254-7317
 - desc: Beaverton
   street: 4955 SW Western Ave
   city: Beaverton
   state: OR
   zip: 97005
+  phone: (503) 619-6619
 - desc: Lake Oswego
   street: 429 1st St
   city: Lake Oswego
   state: OR
   zip: 97034
+  phone: (503) 635-1353
 - desc: Gresham
   street: 971 NE Kelly Ave
   city: Gresham
   state: OR
   zip: 97030
+  phone: (503) 661-2102
 - desc: Milwaukie
   street: 9701 SE McLoughlin Blvd
   city: Milwaukie
   state: OR
   zip: 97222
-phone: (503) 254-7317
+  phone: (503) 342-9459
 notes:

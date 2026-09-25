@@ -1,0 +1,11 @@
+name: Secondhand Pet Supply
+url: https://secondhandpetsupply.com/
+categories:
+- pets_and_livestock: [dog, cat, small_animal]
+locations: 
+- desc: NE Portland
+  street: 5079 NE 122nd Ave
+  city: Portland
+  state: OR
+  zip: 97230
+  phone: (503) 498-8382

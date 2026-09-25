@@ -1,0 +1,11 @@
+name: Portland Pet Supply
+url: https://www.portlandpetsupply.com/
+categories:
+- pets_and_livestock: [dog, cat, small_animal]
+locations: 
+- desc: NE Portland
+  street: 4242 SE Hawthorne Blvd
+  city: Portland
+  state: OR
+  zip:  97215
+  phone: (503) 233-3866

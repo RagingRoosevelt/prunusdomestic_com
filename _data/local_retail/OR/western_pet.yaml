@@ -1,0 +1,11 @@
+name: Western Pet Supply
+url: https://westernpetpdx.com/
+categories:
+- pets_and_livestock: [dog, cat]
+locations: 
+- desc: Beaverton
+  street: 6908 SW Beaverton Hillsdale Hwy
+  city: Portland
+  state: OR
+  zip: 97225
+  phone: 503-297-6644

@@ -1,0 +1,18 @@
+name: Good Dog PDX
+url: https://gooddogpdx.com/
+categories:
+- pets_and_livestock: [dog, cat, grooming]
+locations: 
+- desc: SE Portland
+  street: 1411 SE Stark St
+  city: Portland
+  state: OR
+  zip: 97214
+  phone: 503-477-9101
+- desc: NW Portland
+  street: 2125 NW Raleigh St
+  city: Portland
+  state: OR
+  zip: 97210
+  phone: 503-221-5298
+

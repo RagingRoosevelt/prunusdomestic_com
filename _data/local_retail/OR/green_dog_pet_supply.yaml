@@ -1,0 +1,11 @@
+name: Green Dog Pet Supply
+url: https://greendogpetsupply.com/
+categories:
+- pets_and_livestock: [dog, cat]
+locations: 
+- desc: NE Portland
+  street: 4327 NE Fremont St
+  city: Portland
+  state: OR
+  zip: 97213
+  phone: 503-528-1800

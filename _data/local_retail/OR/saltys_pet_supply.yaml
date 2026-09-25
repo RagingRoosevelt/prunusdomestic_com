@@ -1,0 +1,11 @@
+name: Salty's Pet Supply
+url: https://portlandpetstores.com/saltys-pet-supply/
+categories:
+- pets_and_livestock: [dog, cat]
+locations: 
+- desc: North Portland
+  street: 4039 N Mississippi Ave Ste 104
+  city: Portland
+  state: OR
+  zip: 97227
+  phone: (503) 249-1432

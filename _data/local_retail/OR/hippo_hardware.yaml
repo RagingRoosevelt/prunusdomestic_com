@@ -1,0 +1,12 @@
+name: "Hippo Hardware & Trading"
+url: https://www.hippohardware.com/
+categories:
+- home_improvement: [hardware, plumbing_fixtures, lighting]
+locations: 
+- desc: Central Eastside
+  street: 1040 E Burnside
+  city: Portland
+  state: OR
+  zip: 97214  
+  phone: (503) 231-1444
+notes:

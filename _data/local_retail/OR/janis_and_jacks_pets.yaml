@@ -1,0 +1,11 @@
+name: Janis and Jack's Pets
+url: https://www.janisandjackspets.com/
+categories:
+- pets_and_livestock: [dog, cat, bird, equine, small_animal]
+locations: 
+- desc: Tigard
+  street: 10115 SW Nimbus Ave, Ste 100
+  city: Tigard
+  state: OR
+  zip: 97223
+  phone: 503-352-4269

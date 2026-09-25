@@ -1,0 +1,32 @@
+name: SCRAP
+url: https://portland.scrapcreativereuse.org/
+categories:
+- art_and_craft: [painting, drawing, scrapbooking]
+- fibercraft: [crochet, knitting]
+- sewing: [notions]
+locations: 
+- desc: Central Eastside
+  street: 619 SE 6th Ave
+  city: Portland
+  state: OR
+  zip: 97214
+  phone: 503-294-0769
+- desc: Ann Arbor
+  street: 4567 Washtenaw Ave
+  city: Ann Arbor
+  state: MI
+  zip: 48108 
+  phone: (734) 800 4137 
+- desc: Baltimore
+  street: 913 W Barre Street
+  city: Baltimore
+  state: MD
+  zip: 21230
+  phone: 410-637-8333
+- desc: Richmond
+  street: 322 W Brookland Park Blvd
+  city: Richmond
+  state: VA
+  zip: 23222
+  phone: 804-525-9060
+

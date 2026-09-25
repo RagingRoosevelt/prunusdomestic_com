@@ -1,0 +1,12 @@
+name: Tre Bone
+url: https://www.trebone.net/
+categories:
+- pets_and_livestock: [dog, cat, livestock]
+locations: 
+- desc: St Johns
+  street: 8326 N Lombard Street
+  city: Portland
+  state: OR
+  zip: 97203
+  phone: (971) 255 0772
+

@@ -1,0 +1,11 @@
+name: Selwood Pet Supply
+url: https://www.sellwoodpetsupply.com/
+categories:
+- pets_and_livestock: [dog, cat, livestock_feed, small_animal]
+locations: 
+- desc: Sellwood
+  street: 8334 SE 17th Avenue
+  city: Portland
+  state: OR
+  zip: 97202
+  phone: (503) 239 1517

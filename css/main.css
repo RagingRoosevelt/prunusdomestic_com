@@ -551,6 +551,26 @@ dialog#retail-suggest:popover-open {
 .retail-filter li {
   list-style: none;
 }
+/* Pico makes labels block-level, which would drop the chevron below. */
+.retail-filter li > label {
+  display: inline-block;
+}
+/* Chevron that opens/closes a filter branch; same icon and rotation as the
+   <summary> chevrons (Pico), pointing right when closed. */
+.retail-filter .tree-toggle {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0 0 0.25rem;
+  padding: 0;
+  border: none;
+  vertical-align: middle;
+  background: var(--pico-icon-chevron) no-repeat center / 1rem auto;
+  transform: rotate(-90deg);
+  transition: transform var(--pico-transition);
+  cursor: pointer;
+  &[aria-expanded="true"] { transform: none; }
+}
 .retail-filter > ul {
   padding-left: 0;
 }
@@ -593,5 +613,10 @@ dialog#retail-suggest:popover-open {
     padding-left: 0.75rem;
     margin-bottom: 0.75rem;
     & address { margin-bottom: 0; }
+    /* A location's phone, set a little apart from its street address. */
+    & .loc-phone {
+      display: block;
+      margin-top: 0.5rem;
+    }
   }
 }

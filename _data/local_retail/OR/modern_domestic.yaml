@@ -1,12 +1,12 @@
 name: "Modern Domestic"
 url: https://moderndomesticpdx.com/
 categories:
-- sewing: [fabric, notions, machines, quilting.long_arming]
+- sewing: [fabric, notions, machines, machine_repair, quilting.long_arming]
 locations:
  - desc: NE Portland
    street: 422 NE Alberta Street
    city: Portland
    state: OR
    zip: 97211
-phone: (503) 808-9910
+   phone: (503) 808-9910
 notes:

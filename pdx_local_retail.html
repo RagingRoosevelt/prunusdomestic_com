@@ -12,7 +12,10 @@ category_labels:
 # typed in a shop's locations. For the location filter: both the city and its
 # region show.
 metro_regions:
-- OR.Portland Metro: [OR.Milwaukie, OR.Portland, OR.Beaverton, OR.Gresham, WA.Vancouver, OR.Forest Grove, OR.Lake Oswego, OR.West Linn]
+- OR.Portland Metro: [OR.Milwaukie, OR.Portland, OR.Beaverton, OR.Gresham, WA.Vancouver, 
+                      OR.Forest Grove, OR.Lake Oswego, OR.West Linn, OR.Tigard, OR.Hillsboro,
+                      OR.Aloha, OR.Sherwood, OR.Wilsonville, OR.Oregon City, OR.Tualatin, 
+                      OR.Happy Valley, OR.Troutdale, WA.Camas, WA.Washougal]
 ---
 {%- comment -%}
   Shops come from _data/local_retail/<state>/<shop>.yaml; the state folders
@@ -22,13 +25,35 @@ metro_regions:
   category. Picking a category hides the shops with no path at or under it,
   and any group left empty. Labels are the path text, _ as spaces, title case.
 {%- endcomment -%}
-{%- assign shops = "" | split: "" -%}
+{%- assign unsorted = "" | split: "" -%}
 {%- for state in site.data.local_retail -%}
   {%- for entry in state[1] -%}
-    {%- assign shops = shops | push: entry[1] -%}
+    {%- assign unsorted = unsorted | push: entry[1] -%}
   {%- endfor -%}
 {%- endfor -%}
-{%- assign shops = shops | sort_natural: "name" -%}
+{%- comment -%}
+  Sorted by name ignoring a leading "The " (case-insensitive), so "The
+  Enchanted Rose Emporium" files under E. Liquid can't sort by a computed
+  key, so: build each shop's key (keys[i] goes with unsorted[i]), sort the
+  distinct keys, then collect the shops back in key order.
+{%- endcomment -%}
+{%- assign keys = "" | split: "" -%}
+{%- for shop in unsorted -%}
+  {%- assign lead = shop.name | downcase | slice: 0, 4 -%}
+  {%- if lead == "the " -%}
+    {%- assign key = shop.name | slice: 4, shop.name.size -%}
+  {%- else -%}
+    {%- assign key = shop.name -%}
+  {%- endif -%}
+  {%- assign keys = keys | push: key -%}
+{%- endfor -%}
+{%- assign sorted_keys = keys | uniq | sort_natural -%}
+{%- assign shops = "" | split: "" -%}
+{%- for key in sorted_keys -%}
+  {%- for k in keys -%}
+    {%- if k == key -%}{%- assign shops = shops | push: unsorted[forloop.index0] -%}{%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
 {%- assign roots = "" | split: "" -%}
 {%- for shop in shops -%}
   {%- for pair in shop.categories.first -%}
@@ -39,7 +64,7 @@ metro_regions:
 {%- assign roots = roots | uniq | sort_natural %}
       <h1>Local PDX businesses</h1>
       <article>
-        I'm trying shop as much as I can from local businesses.  I've struggled on
+        I'm trying to shop as much as I can from local businesses.  I've struggled on
         this mission because I've found it hard to discover local shops.  I'd like
         to help you have an easier time of that by indexing local shops that I've
         discovered.  If I'm missing something that should be on here, please let me
@@ -145,22 +170,35 @@ metro_regions:
 {%- endif -%}
 {%- comment -%}
   Closed, the summary lists each location's short desc (or its street, if
-  it has no desc). Open, it swaps to
-  "Location(s)" and the full street addresses show below (css/main.css).
-  With no street address to reveal there's nothing to open, so descs only.
+  it has no desc). Open, it swaps to "Location(s)" and lists each location
+  with something more to show: its street address (a Google Maps link)
+  and/or its phone. Phones only ever show in that list. A shop-level
+  `phone:` (multi-location shops not yet split per location) stands in for
+  any location without its own. A location with a phone but no street is
+  listed by its desc. With nothing to reveal, the card shows descs only.
 {%- endcomment -%}
-{%- assign streets = shop.locations | where_exp: "loc", "loc.street" -%}
-{%- if streets.size > 0 %}
+{%- assign listed = "" | split: "" -%}
+{%- for loc in shop.locations -%}
+  {%- if loc.street or loc.phone or shop.phone -%}{%- assign listed = listed | push: loc -%}{%- endif -%}
+{%- endfor -%}
+{%- if listed.size > 0 %}
             <details>
-              <summary><span class="shop-descs">{% for loc in shop.locations %}<span>{{ loc.desc | default: loc.street | escape }}</span>{% endfor %}</span><span class="shop-open">Location{% if streets.size > 1 %}s{% endif %}</span></summary>
+              <summary><span class="shop-descs">{% for loc in shop.locations %}<span>{{ loc.desc | default: loc.street | escape }}</span>{% endfor %}</span><span class="shop-open">Location{% if listed.size > 1 %}s{% endif %}</span></summary>
               <ul>
-{%- for loc in streets %}
+{%- for loc in listed %}
+  {%- assign phone = loc.phone | default: shop.phone -%}
 {%- comment -%}
   Google Maps' documented search URL. The shop name is part of the query so
   Maps lands on the business listing (hours, photos), not just a pin.
 {%- endcomment -%}
 {%- capture map_query %}{{ shop.name }}, {{ loc.street }}, {{ loc.city }}, {{ loc.state }} {{ loc.zip }}{% endcapture %}
-                <li><address><a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query | strip | cgi_escape }}" target="_blank" aria-label="{{ loc.street | escape }}, {{ loc.city | escape }} on Google Maps, opens in a new tab">{{ loc.street | escape }}<br>{{ loc.city | escape }}, {{ loc.state }} {{ loc.zip }}</a></address></li>
+                <li><address>
+                  {%- if loc.street -%}
+                  <a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query | strip | cgi_escape }}" target="_blank" aria-label="{{ loc.street | escape }}, {{ loc.city | escape }} on Google Maps, opens in a new tab">{{ loc.street | escape }}<br>{{ loc.city | escape }}, {{ loc.state }} {{ loc.zip }}</a>
+                  {%- else -%}
+                  <span>{{ loc.desc | default: loc.city | escape }}</span>
+                  {%- endif -%}
+                  {%- if phone %}<span class="loc-phone">{% include phone.html number=phone %}</span>{% endif %}</address></li>
 {%- endfor %}
               </ul>
             </details>
@@ -168,9 +206,6 @@ metro_regions:
 {%- for loc in shop.locations %}{% if loc.desc %}
             <p>{{ loc.desc | escape }}</p>
 {%- endif %}{% endfor -%}
-{%- endif -%}
-{%- if shop.phone %}
-            {% include phone.html number=shop.phone %}
 {%- endif -%}
 {%- if shop.notes %}
             <p>{{ shop.notes | escape }}</p>
@@ -224,7 +259,10 @@ metro_regions:
           .map(w => w && w[0].toUpperCase() + w.slice(1)).join(" ")
         const label = (path, seg) => labels[path] ?? titleCase(seg)
 
-        function radio(name, value, text, children = []) {
+        // A collapsible node gets a chevron button after its label that
+        // shows/hides its child list, starting closed. Not <details>: the radio
+        // would sit in its <summary>, so picking it would also toggle.
+        function radio(name, value, text, children = [], collapsible = false) {
           const li = document.createElement("li")
           const label = li.appendChild(document.createElement("label"))
           const input = label.appendChild(document.createElement("input"))
@@ -232,15 +270,41 @@ metro_regions:
           input.name = name
           input.value = value
           label.append(" " + text)
-          if (children.length) li.appendChild(document.createElement("ul")).append(...children)
+          if (!children.length) return li
+          if (collapsible) {
+            const toggle = li.appendChild(document.createElement("button"))
+            toggle.type = "button"
+            toggle.className = "tree-toggle"
+            toggle.setAttribute("aria-label", text)
+          }
+          li.appendChild(document.createElement("ul")).append(...children)
+          if (collapsible) setOpen(li, false)
           return li
+        }
+        function setOpen(li, open) {
+          li.querySelector(":scope > .tree-toggle").setAttribute("aria-expanded", open)
+          li.querySelector(":scope > ul").hidden = !open
+        }
+        document.getElementById("retail-filters").addEventListener("click", event => {
+          const toggle = event.target.closest(".tree-toggle")
+          if (toggle) setOpen(toggle.parentElement, toggle.getAttribute("aria-expanded") !== "true")
+        })
+        // Open every collapsed branch above the picked radios, so a pick made
+        // from the address or storage isn't hidden inside a closed branch.
+        function revealPicked() {
+          for (const input of document.querySelectorAll("#retail-filters input:checked")) {
+            for (let li = input.closest("li").parentElement.closest("li"); li; li = li.parentElement.closest("li")) {
+              if (li.querySelector(":scope > .tree-toggle")) setOpen(li, true)
+            }
+          }
         }
         const byName = ([a], [b]) => a.localeCompare(b)
 
         function build(node, parent) {
           return [...node].sort(byName).map(([seg, children]) => {
             const path = parent ? `${parent}.${seg}` : seg
-            return radio("category", path, label(path, seg), build(children, path))
+            // Only root categories collapse; deeper branches stay open.
+            return radio("category", path, label(path, seg), build(children, path), !parent)
           })
         }
         filter.querySelector("ul").append(...build(tree, ""))
@@ -252,8 +316,9 @@ metro_regions:
         // it's also listed on its
         // own under its own state. A shop's places are the city plus every
         // tree node above any listing of it, so picking any node shows exactly
-        // the shops listed beneath it. Locations with no city aren't
-        // anywhere, so any location pick hides them.
+        // the shops listed beneath it. A location with a state but no city
+        // yet counts as in that state only; one with no state isn't anywhere,
+        // so any location pick hides it.
         const regionOf = Object.fromEntries(metroRegions.flatMap(r =>
           Object.entries(r).flatMap(([region, cities]) => (cities ?? []).map(c => [c, region]))))
         // Split at the first "." only: a city can have its own ("St. Helens").
@@ -262,10 +327,13 @@ metro_regions:
         const cityPlaces = shops.map(shop => (shop.locations ?? [])
           .filter(loc => loc.state && loc.city)
           .map(loc => `${loc.state}.${loc.city}`))
-        const places = cityPlaces.map(cities => cities.flatMap(city => {
+        const statePlaces = shops.map(shop => (shop.locations ?? [])
+          .filter(loc => loc.state && !loc.city)
+          .map(loc => loc.state))
+        const places = cityPlaces.map((cities, i) => [...statePlaces[i], ...cities.flatMap(city => {
           const region = regionOf[city]
           return [city, stateOf(city), ...(region ? [region, stateOf(region)] : [])]
-        }))
+        })])
 
         // Map of state -> Map of (region or city) -> [cities in that region].
         const states = new Map()
@@ -279,6 +347,10 @@ metro_regions:
           if (region) add(stateOf(region), region, city)
           if (!region || stateOf(region) !== stateOf(city)) add(stateOf(city), city)
         }
+        // A state whose only shops have no city yet still gets its entry.
+        for (const state of new Set(statePlaces.flat())) {
+          if (!states.has(state)) states.set(state, new Map())
+        }
         // Regions (the entries with member cities) before stand-alone cities.
         const regionsFirst = (a, b) => (b[1].length > 0) - (a[1].length > 0) || byName(a, b)
         // "OR.Milwaukie" under OR -> "Milwaukie"; "WA.Vancouver" under OR ->
@@ -289,9 +361,10 @@ metro_regions:
           radio("location", state, state, [...children].sort(regionsFirst).map(([place, members]) =>
             radio("location", place, placeLabel(place, state),
               members.map(city => [placeLabel(city, state), city]).sort(byName)
-                .map(([text, city]) => radio("location", city, text)))))))
+                .map(([text, city]) => radio("location", city, text)), true)), true)))
 
         function apply() {
+          revealPicked()
           const cat = filter.querySelector("input:checked")?.value ?? ""
           const loc = locationFilter.querySelector("input:checked")?.value ?? ""
           // The panel is closed while browsing, so the button says what's on.
