@@ -109,7 +109,7 @@ metro_regions:
             </label>
             <input type="hidden" name="title" disabled>
             <p><small>This opens GitHub in a new tab, where you'll need to sign in to submit.
-              No GitHub account? Email <a href="mailto:shop_local@prunusdomestic.com">shop_local@prunusdomestic.com</a> instead.</small></p>
+              No GitHub account? Email <a id="retail-suggest-email" href="mailto:shop_local@prunusdomestic.com">shop_local@prunusdomestic.com</a> instead.</small></p>
             <button type="submit">Continue on GitHub</button>
           </form>
         </article>
@@ -122,6 +122,19 @@ metro_regions:
           without JS there's nothing to filter with.
         {%- endcomment %}
         <button type="button" id="retail-filters-open" popovertarget="retail-filters" hidden>Filter shops</button>
+        <button type="button" id="retail-map-open" popovertarget="retail-map-panel" hidden>View on map</button>
+        {%- comment -%}
+          Map fly-over, same popover pattern as the filters. Leaflet and the
+          OpenStreetMap tiles load the first time it opens (see the script),
+          so the page doesn't pay for a map nobody looks at.
+        {%- endcomment %}
+        <div id="retail-map-panel" popover>
+          <div class="retail-filters-head">
+            <h2>Shop map</h2>
+            <button type="button" class="retail-filters-close" popovertarget="retail-map-panel" popovertargetaction="hide" aria-label="Close map">&times;</button>
+          </div>
+          <div id="retail-map"></div>
+        </div>
         <div id="retail-filters" popover>
           <div class="retail-filters-head">
             <h2>Filter shops</h2>
@@ -330,10 +343,17 @@ metro_regions:
         const statePlaces = shops.map(shop => (shop.locations ?? [])
           .filter(loc => loc.state && !loc.city)
           .map(loc => loc.state))
-        const places = cityPlaces.map((cities, i) => [...statePlaces[i], ...cities.flatMap(city => {
+        // Every location-filter value one location answers to. A shop's places
+        // are all of its locations'; the map uses them per location, so a
+        // visible shop's pins outside the picked place stay off the map.
+        const locPlaces = loc => {
+          if (!loc.state) return []
+          if (!loc.city) return [loc.state]
+          const city = `${loc.state}.${loc.city}`
           const region = regionOf[city]
           return [city, stateOf(city), ...(region ? [region, stateOf(region)] : [])]
-        })])
+        }
+        const places = shops.map(shop => (shop.locations ?? []).flatMap(locPlaces))
 
         // Map of state -> Map of (region or city) -> [cities in that region].
         const states = new Map()
@@ -374,6 +394,8 @@ metro_regions:
             .map(input => input.parentElement.textContent.trim())
           openButton.textContent = on.length ? `Filters: ${on.join(", ")}` : "Filter shops"
           const shows = i => (cat === "" || matches(i, cat)) && (loc === "" || places[i].includes(loc))
+          pinShows = (i, location) => shows(i) && (loc === "" || locPlaces(location).includes(loc))
+          updateMap()
           for (const section of list.querySelectorAll("section")) {
             let any = false
             for (const card of section.querySelectorAll("article[data-shop]")) {
@@ -445,6 +467,73 @@ metro_regions:
         addEventListener("pageshow", apply)
         openButton.hidden = false
 
+        // Shop map: Leaflet + OpenStreetMap tiles, loaded on first open. A pin
+        // per location with a `geo: lat, lng`; only pins passing the filters
+        // are on the map, and it zooms to fit them. Popups are built from DOM
+        // nodes, not HTML strings, so shop data can't inject markup.
+        const mapPanel = document.getElementById("retail-map-panel")
+        const mapButton = document.getElementById("retail-map-open")
+        let map, pinShows = () => true
+        const pins = []  // {i, location, marker}
+        const parseGeo = geo => {
+          const [lat, lng] = String(geo ?? "").split(",").map(Number)
+          return Number.isFinite(lat) && Number.isFinite(lng) ? [lat, lng] : null
+        }
+        const load = (tag, props) => new Promise((resolve, reject) =>
+          document.head.appendChild(Object.assign(document.createElement(tag), props, {onload: resolve, onerror: reject})))
+        function popup(shop, location) {
+          const el = document.createElement("div")
+          const name = el.appendChild(document.createElement(shop.url ? "a" : "strong"))
+          name.textContent = shop.name
+          if (shop.url) Object.assign(name, {href: shop.url, target: "_blank"})
+          const lines = [location.desc, location.street, [location.city, location.state].filter(Boolean).join(", ")]
+          for (const line of lines.filter(Boolean)) el.append(document.createElement("br"), line)
+          if (location.street) {
+            const query = `${shop.name}, ${location.street}, ${location.city ?? ""}, ${location.state ?? ""} ${location.zip ?? ""}`
+            const maps = el.appendChild(Object.assign(document.createElement("a"), {
+              href: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query),
+              target: "_blank", textContent: "Open in Google Maps"}))
+            el.insertBefore(document.createElement("br"), maps)
+          }
+          return el
+        }
+        async function initMap() {
+          await Promise.all([
+            load("link", {rel: "stylesheet", href: "/css/lib/leaflet-1.9.4/leaflet.css"}),
+            load("script", {src: "/js/lib/leaflet-1.9.4/leaflet.js"}),
+          ])
+          map = L.map("retail-map")
+          L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(map)
+          shops.forEach((shop, i) => (shop.locations ?? []).forEach(location => {
+            const at = parseGeo(location.geo)
+            if (at) pins.push({i, location, marker: L.marker(at).bindPopup(popup(shop, location))})
+          }))
+        }
+        function updateMap() {
+          if (!map) return
+          const shown = pins.filter(pin => pinShows(pin.i, pin.location))
+          for (const pin of pins) shown.includes(pin) ? pin.marker.addTo(map) : pin.marker.remove()
+          const points = shown.map(pin => pin.marker.getLatLng())
+          if (points.length === 1) map.setView(points[0], 15)
+          else if (points.length) map.fitBounds(L.latLngBounds(points), {padding: [30, 30], maxZoom: 15})
+          else map.setView([45.52, -122.68], 10)  // nothing matches: Portland
+        }
+        mapPanel.addEventListener("toggle", async event => {
+          if (event.newState !== "open") return
+          if (!map) {
+            try { await initMap() } catch {
+              document.getElementById("retail-map").textContent = "The map couldn't load."
+              return
+            }
+          }
+          map.invalidateSize()  // it was sized while the panel was closed
+          updateMap()
+        })
+        mapButton.hidden = !shops.some(shop => (shop.locations ?? []).some(l => parseGeo(l.geo)))
+
         // Suggestion dialog: always send a title, so it doesn't depend on
         // GitHub finding the template's default. Prefixes match the `title:`
         // in each .github/ISSUE_TEMPLATE file; with no shop picked, the
@@ -456,12 +545,39 @@ metro_regions:
           "update_shop.yml": "[Update shop]",
           "shop_closing.yml": "[Shop closing]",
         }
+        // The email link gets the same subject, and a plain-text cut of the
+        // matching issue template as its body: one question per line with
+        // room to answer. Keep the questions in step with those templates.
+        const EMAIL = "shop_local@prunusdomestic.com"
+        const EMAIL_BODY = {
+          "new_shop.yml": shop => [
+            "Shop name:", "Website:", "What does the shop sell or offer?", "Phone number:",
+            "Location (neighborhood or landmark, street, city, state, ZIP):",
+            "Other locations:", "Anything else?",
+          ],
+          "update_shop.yml": shop => [
+            `Shop: ${shop}`, "What needs to change?",
+            "Where can we confirm this? (a link, social media post, or photo)",
+          ],
+          "shop_closing.yml": shop => [
+            `Shop: ${shop}`,
+            "What's happening? (closed for good / closing soon / one location is closing)",
+            "When?", "Details:",
+            "Where can we confirm this? (a link, news story, or photo of a sign)",
+          ],
+        }
+        const emailLink = document.getElementById("retail-suggest-email")
         suggestForm.addEventListener("change", () => {
           const template = suggestForm.elements.template.value
           const title = suggestForm.elements.title
           title.disabled = !TITLE_PREFIX[template]
           const shop = template === "new_shop.yml" ? "" : shopSelect.value || "<State>, <City>: <Shop name>"
           title.value = `${TITLE_PREFIX[template]} ${shop}`
+          // mailto wants %20 for spaces and CRLF line breaks (RFC 6068).
+          const body = EMAIL_BODY[template]?.(shop).join("\r\n\r\n\r\n")
+          emailLink.href = body
+            ? `mailto:${EMAIL}?subject=${encodeURIComponent(title.value.trim())}&body=${encodeURIComponent(body)}`
+            : `mailto:${EMAIL}`
         })
         // The form opens GitHub in a new tab; close the dialog behind it.
         suggestForm.addEventListener("submit", () => suggest.hidePopover())

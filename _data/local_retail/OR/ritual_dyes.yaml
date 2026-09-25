@@ -3,10 +3,11 @@ url: https://ritualdyes.com/
 categories:
 - fibercraft: [crochet, knitting, weaving]
 locations: 
-- desc: Portland
-  street: SE Portland
+- desc: SE Portland
+  street: 3300 SE Belmont Street
   city: Portland
   state: OR
   zip: 97214
+  geo: 45.516396, -122.630861
   phone: (503) 206-5616
 notes:

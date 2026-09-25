@@ -10,23 +10,27 @@ locations:
   city: Portland
   state: OR
   zip: 97214
+  geo: 45.518593, -122.659803
   phone: 503-294-0769
 - desc: Ann Arbor
   street: 4567 Washtenaw Ave
   city: Ann Arbor
   state: MI
   zip: 48108 
+  geo: 42.251989, -83.66994
   phone: (734) 800 4137 
 - desc: Baltimore
   street: 913 W Barre Street
   city: Baltimore
   state: MD
   zip: 21230
+  geo: 39.282608, -76.627456
   phone: 410-637-8333
 - desc: Richmond
   street: 322 W Brookland Park Blvd
   city: Richmond
   state: VA
   zip: 23222
+  geo: 37.571724, -77.436572
   phone: 804-525-9060
 

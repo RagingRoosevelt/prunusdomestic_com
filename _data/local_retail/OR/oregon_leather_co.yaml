@@ -8,11 +8,13 @@ locations:
   city: Portland
   state: OR
   zip: 97209
+  geo: 45.523969, -122.672316
   phone: 503-228-4105
 - desc: Eugene
   street: 810 Conger St
   city: Eugene
   state: OR
-  zip: 97204
+  zip: 97402
+  geo: 44.050804, -123.134137
   phone: 541-343-2563
 

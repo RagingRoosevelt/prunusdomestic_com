@@ -1,12 +1,13 @@
 name: Fiddlesticks Quilt Shop
 url: https://fiddlesticksquiltshop.com/
 categories:
-- sewing: [fabric, quilting, long_arming]
+- sewing: [fabric, quilting.long_arming]
 locations: 
 - desc: Vancouver
   street: 2701 NE 114th Ave #1
   city: Vancouver
   state: WA
   zip: 98684
+  geo: 45.703471, -122.644039
   phone: (360) 718-7103
 

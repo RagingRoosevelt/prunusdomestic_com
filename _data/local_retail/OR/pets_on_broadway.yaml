@@ -8,11 +8,13 @@ locations:
   city: Portland
   state: OR
   zip: 97232 
+  geo: 45.535103, -122.637319
   phone: 503-282-5824
 - desc: Hillsboro
   street: 3495 SE Cornelius Pass Rd  
   city: Hillsboro
   state: OR
   zip: 97123 
+  geo: 45.4946, -122.902758
   phone: 971-377-7387  
 

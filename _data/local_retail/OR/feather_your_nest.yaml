@@ -8,5 +8,6 @@ locations:
    city: Gresham
    state: OR
    zip: 97030
+   geo: 45.498564, -122.430883
    phone: +19712200936
 notes:

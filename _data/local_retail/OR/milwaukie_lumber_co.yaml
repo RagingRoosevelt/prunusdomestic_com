@@ -8,16 +8,19 @@ locations:
   city: Milwaukie
   state: OR
   zip: 97222
+  geo: 45.443462, -122.639946
   phone: (503) 654-5417
 - desc: Vancouver
   street: 13113 NE Fourth Plain Blvd
   city: Vancouver
   state: WA
   zip: 98682
+  geo: 45.67094, -122.537694
   phone: (360) 256-8000
 - desc: near Mall 205
   street: 8048 SE Stark St
   city: Portland
   state: OR
   zip: 97215
+  geo: 45.51909, -122.580997
   phone: (503) 253-0000

@@ -1,12 +1,13 @@
 name: Just for Fun Quilting
 url: https://www.justforfunquilting.com/
 categories:
-- sewing: [fabric, quilting, long_arming]
+- sewing: [fabric, quilting.long_arming]
 locations:
  - desc: Vancouver
    street: 1503 NE 78th St. #12
    city: Vancouver
    state: WA
    zip: 98665
+   geo: 45.678526, -122.656747
    phone: (360) 882-9101
 

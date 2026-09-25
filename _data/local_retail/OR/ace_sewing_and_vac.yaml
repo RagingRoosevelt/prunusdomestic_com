@@ -1,18 +1,20 @@
 name: Ace Sewing & Vacuum
 url: https://www.acesewingandvacuum.com/
 categories:
-- sewing: [fabric, quilting, long_arming, machines, machine_repair]
+- sewing: [fabric, quilting.long_arming, machines, machine_repair]
 locations: 
 - desc: Tigard
   street: 11945 SW Pacific Hwy #210
   city: Tigard
   state: OR
   zip: 97223
+  geo: 45.43385, -122.765579
   phone:  (503) 538-1122
 - desc: Newberg
   street: 2414 Portland Rd
   city: Newberg
   state: OR
   zip: 97132
+  geo: 45.303557, -122.956035
   phone:  (503) 538-1122
 

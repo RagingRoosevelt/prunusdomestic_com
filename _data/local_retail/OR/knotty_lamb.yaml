@@ -8,5 +8,6 @@ locations:
   city: Forest Grove
   state: OR
   zip: 97116
+  geo: 45.518432, -123.111979
   phone: (503) 992-0606
 notes:

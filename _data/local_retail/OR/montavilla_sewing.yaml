@@ -8,29 +8,34 @@ locations:
   city: Portland
   state: OR 
   zip: 97216 
+  geo: 45.519067, -122.577793
   phone: (503) 254-7317
 - desc: Beaverton
   street: 4955 SW Western Ave
   city: Beaverton
   state: OR
   zip: 97005
+  geo: 45.484103, -122.782798
   phone: (503) 619-6619
 - desc: Lake Oswego
   street: 429 1st St
   city: Lake Oswego
   state: OR
   zip: 97034
+  geo: 45.41975, -122.664065
   phone: (503) 635-1353
 - desc: Gresham
   street: 971 NE Kelly Ave
   city: Gresham
   state: OR
   zip: 97030
+  geo: 45.504129, -122.426081
   phone: (503) 661-2102
 - desc: Milwaukie
   street: 9701 SE McLoughlin Blvd
   city: Milwaukie
   state: OR
   zip: 97222
+  geo: 45.452588, -122.641417
   phone: (503) 342-9459
 notes:

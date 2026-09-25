@@ -1,12 +1,13 @@
 name: My Quilting Loft
 url: https://myquiltingloft.myshopify.com/
 categories:
-- sewing: [fabric, quilting, long_arming]
+- sewing: [fabric, quilting.long_arming]
 locations: 
 - desc: Troutdale
   street: 105 E. Historic Columbia River Hwy
   city: Troutdale
   state: OR
   zip: 97060
+  geo: 45.540806, -122.388196
   phone: 971-292-2991
 

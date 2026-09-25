@@ -495,12 +495,15 @@ dialog#retail-suggest:popover-open {
 /* Filter button and fly-over sit outside any <article>, so they'd get
    Pico's default font instead of the site's. */
 #retail-filters-open,
-#retail-filters {
+#retail-map-open,
+#retail-filters,
+#retail-map-panel {
   font-family: "BrassMono";
 }
-/* Filter fly-over: the UA popover styles centre it and size it to its
-   content; this pins it full height to the right edge instead. */
-#retail-filters {
+/* Filter and map fly-overs: the UA popover styles centre a popover and size
+   it to its content; this pins them full height to the right edge instead. */
+#retail-filters,
+#retail-map-panel {
   inset: 0 0 0 auto;
   margin: 0;
   width: min(46rem, 100vw);
@@ -525,6 +528,8 @@ dialog#retail-suggest:popover-open {
     margin-bottom: 1rem;
     & h2 { margin: 0; }
   }
+}
+#retail-filters {
   /* Location | category side by side, stacking once a column would drop
      under 14rem (phones), so long labels don't wrap into a sliver. */
   & .retail-filters-cols {
@@ -533,6 +538,9 @@ dialog#retail-suggest:popover-open {
     gap: 1rem 2rem;
     align-items: start;
   }
+}
+#retail-filters,
+#retail-map-panel {
   & .retail-filters-close {
     padding: 0 0.5rem;
     border: none;
@@ -542,8 +550,41 @@ dialog#retail-suggest:popover-open {
     line-height: 1;
   }
 }
-#retail-filters-open {
+#retail-filters-open,
+#retail-map-open {
   margin-bottom: 1rem;
+}
+#retail-map-open {
+  margin-left: 0.5rem;
+}
+/* Map fly-over: wider than the filters, and the map fills the height under
+   its heading instead of the panel scrolling. */
+#retail-map-panel {
+  width: min(60rem, 100vw);
+  overflow: hidden;
+  &:popover-open {
+    display: flex;
+    flex-direction: column;
+  }
+}
+#retail-map {
+  flex: 1;
+  min-height: 0;
+  /* Leaflet gives markers and zoom buttons role="button", which Pico's
+     classless CSS paints as purple buttons (padding, border, background).
+     Leaflet's own rules win everything else, so undo just those. */
+  & .leaflet-marker-icon {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  & .leaflet-bar a {
+    padding: 0;
+    border-width: 0 0 1px;
+    box-shadow: none;
+  }
 }
 .retail-filter ul {
   padding-left: 1.25rem;

@@ -8,4 +8,5 @@ locations:
   city: Vancouver
   state: WA
   zip: 98660
+  geo: 45.628795, -122.66867
 

@@ -8,5 +8,6 @@ locations:
   city: Milwaukie
   state: OR
   zip: 97222
+  geo: 45.440737, -122.624323
   phone: 503-232-1659
 notes:

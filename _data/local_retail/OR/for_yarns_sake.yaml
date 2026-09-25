@@ -8,5 +8,6 @@ locations:
   city: Beaverton
   state: OR
   zip: 97005
+  geo: 45.492391, -122.806224
   phone: +15034699500
 notes:

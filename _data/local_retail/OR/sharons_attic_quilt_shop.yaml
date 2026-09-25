@@ -1,12 +1,13 @@
 name: Sharon's Attic Quilt Shop
 url: https://www.sharonsatticquiltshop.com/
 categories:
-- sewing: [fabric, quilting, long_arming]
+- sewing: [fabric, quilting.long_arming]
 locations: 
 - desc: Hillsboro
   street: 2950 SE Cornelius Pass Rd #100
   city: Hillsboro
   state: OR
-  zip: 97129
+  zip: 97123
+  geo: 45.498469,-122.901899
   phone: 503-259-3475
 

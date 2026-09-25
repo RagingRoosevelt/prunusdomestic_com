@@ -8,11 +8,13 @@ locations:
    city: Milwaukie
    state: OR
    zip: 97222
+   geo: 45.452588, -122.641417
    phone: (503)786-1234
  - desc: Beaverton
    street: 4955 S.W. Western Ave
    city: Beaverton
    state: OR
    zip: 97005
+   geo: 45.484103, -122.782798
    phone: (503)646-3000
 notes:

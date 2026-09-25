@@ -8,11 +8,13 @@ locations:
   city: Portland
   state: OR
   zip: 97232
+  geo: 45.535003, -122.622093
   phone: 503-287-0776
 - desc: Westside Barbur
   street: 7365 SW Barbur Blvd
   city: Portland
   state: OR
   zip: 97219
+  geo: 45.471132, -122.684801
   phone: 503-245-0714
 notes:

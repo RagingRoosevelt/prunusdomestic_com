@@ -9,29 +9,34 @@ locations:
   city: Vancouver
   state: WA
   zip: 98665
+  geo: 45.678613, -122.66627
   phone: +13606354700
 - desc: NE Portland
   street: 10625 NE Sandy Blvd
   city: Portland
   state: OR
   zip: 97220
+  geo: 45.558785, -122.553398
   phone: 503.256.3103
 - desc: Vancouver
   street: 16509 SE 1st Street
   city: Vancouver
   state: WA
   zip: 98684
+  geo: 45.621126, -122.502215
   phone: +13606937881
 - desc: Vancouver Heights
   street: 8000 E Mill Plain Blvd
   city: Vancouver
   state: WA
   zip: 98664
+  geo: 45.624252, -122.590041
   phone: +13604330855
 - desc: West Linn
   street: 1855 Blankenship RD
   city: West Linn
   state: OR
   zip: 97068
+  geo: 45.349995, -122.654028
   phone: +15033059865
 notes:

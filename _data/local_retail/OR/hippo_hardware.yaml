@@ -8,5 +8,6 @@ locations:
   city: Portland
   state: OR
   zip: 97214  
+  geo: 45.522856, -122.655206
   phone: (503) 231-1444
 notes:

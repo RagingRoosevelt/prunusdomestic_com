@@ -8,11 +8,13 @@ locations:
   city: Portland
   state: OR
   zip: 97214
+  geo: 45.519393, -122.651432
   phone: 503-477-9101
 - desc: NW Portland
   street: 2125 NW Raleigh St
   city: Portland
   state: OR
   zip: 97210
+  geo: 45.534184, -122.695485
   phone: 503-221-5298
 

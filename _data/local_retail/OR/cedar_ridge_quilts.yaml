@@ -8,5 +8,6 @@ locations:
   city: Oregon City
   state: OR
   zip: 97045
+  geo: 45.330845, -122.57172
   phone: 503-908-1398
 

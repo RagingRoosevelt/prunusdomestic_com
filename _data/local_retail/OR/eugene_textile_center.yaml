@@ -7,6 +7,7 @@ locations:
    street: 2750 Roosevelt Blvd
    city: Eugene
    state: OR
-   zip: 
+   zip: 97402
+   geo: 44.063651, -123.138079
    phone: 541-688-1565
 notes:
