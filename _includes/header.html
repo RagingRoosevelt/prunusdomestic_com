@@ -4,7 +4,7 @@
         <a href="/" id="home">Prunus Domestic</a>
       </div>
 
-      <button type="button" class="nav-toggle" command="toggle-popover" commandfor="site-nav" aria-label="Menu"><span></span></button>
+      <button type="button" class="nav-toggle" command="toggle-popover" commandfor="site-nav" popovertarget="site-nav" aria-label="Menu"><span></span></button>
       <nav id="site-nav" popover>
         <a href="/classes/"{% if page.section == "classes" %} aria-current="page"{% endif %}>Classes</a>
         <a href="/commissions/"{% if page.section == "commissions" %} aria-current="page"{% endif %}>Commissions</a>

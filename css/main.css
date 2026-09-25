@@ -352,9 +352,13 @@ header {
   /* Hamburger menu: Pico's classless build has no built-in nav-collapse
      component. The same button + nav[popover] markup ships on every page and
      at every breakpoint; only this CSS changes between mobile and desktop.
-     The button uses the native command/commandfor="toggle-popover" invoker
-     (no JS) to open/close #site-nav, which gets aria-expanded/aria-controls/
-     aria-haspopup and Escape/light-dismiss for free from the browser. On
+     The button uses native invokers (no JS) to open/close #site-nav, which
+     gets aria-expanded/aria-controls/aria-haspopup and Escape/light-dismiss
+     for free from the browser. It carries both command/commandfor and
+     popovertarget: command/commandfor needs Safari/iOS 26.2 (Chrome 135,
+     Firefox 144), and on older iPhones the button did nothing. Browsers that
+     support commandfor use it and ignore popovertarget; older ones fall back
+     to popovertarget (Safari 17+). On
      desktop the button is hidden and #site-nav is forced flex regardless of
      its popover-open state, ignoring the toggle entirely. */
   & button.nav-toggle {
