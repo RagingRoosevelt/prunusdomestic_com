@@ -146,16 +146,21 @@ metro_regions:
 {%- comment -%}
   Closed, the summary lists each location's short desc (or its street, if
   it has no desc). Open, it swaps to
-  "Address(es)" and the full street addresses show below (css/main.css).
+  "Location(s)" and the full street addresses show below (css/main.css).
   With no street address to reveal there's nothing to open, so descs only.
 {%- endcomment -%}
 {%- assign streets = shop.locations | where_exp: "loc", "loc.street" -%}
 {%- if streets.size > 0 %}
             <details>
-              <summary><span class="shop-descs">{% for loc in shop.locations %}<span>{{ loc.desc | default: loc.street | escape }}</span>{% endfor %}</span><span class="shop-open">Address{% if streets.size > 1 %}es{% endif %}</span></summary>
+              <summary><span class="shop-descs">{% for loc in shop.locations %}<span>{{ loc.desc | default: loc.street | escape }}</span>{% endfor %}</span><span class="shop-open">Location{% if streets.size > 1 %}s{% endif %}</span></summary>
               <ul>
 {%- for loc in streets %}
-                <li><address>{{ loc.street | escape }}<br>{{ loc.city | escape }}, {{ loc.state }} {{ loc.zip }}</address></li>
+{%- comment -%}
+  Google Maps' documented search URL. The shop name is part of the query so
+  Maps lands on the business listing (hours, photos), not just a pin.
+{%- endcomment -%}
+{%- capture map_query %}{{ shop.name }}, {{ loc.street }}, {{ loc.city }}, {{ loc.state }} {{ loc.zip }}{% endcapture %}
+                <li><address><a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query | strip | cgi_escape }}" target="_blank" aria-label="{{ loc.street | escape }}, {{ loc.city | escape }} on Google Maps, opens in a new tab">{{ loc.street | escape }}<br>{{ loc.city | escape }}, {{ loc.state }} {{ loc.zip }}</a></address></li>
 {%- endfor %}
               </ul>
             </details>
