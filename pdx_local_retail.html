@@ -131,6 +131,7 @@ metro_regions:
         <div id="retail-map-panel" popover>
           <div class="retail-filters-head">
             <h2>Shop map</h2>
+            <label class="map-labels-toggle"><input type="checkbox" role="switch" id="retail-map-labels"> Labels</label>
             <button type="button" class="retail-filters-close" popovertarget="retail-map-panel" popovertargetaction="hide" aria-label="Close map">&times;</button>
           </div>
           <div id="retail-map"></div>
@@ -481,20 +482,80 @@ metro_regions:
         }
         const load = (tag, props) => new Promise((resolve, reject) =>
           document.head.appendChild(Object.assign(document.createElement(tag), props, {onload: resolve, onerror: reject})))
-        function popup(shop, location) {
-          const el = document.createElement("div")
-          const name = el.appendChild(document.createElement(shop.url ? "a" : "strong"))
-          name.textContent = shop.name
-          if (shop.url) Object.assign(name, {href: shop.url, target: "_blank"})
-          const lines = [location.desc, location.street, [location.city, location.state].filter(Boolean).join(", ")]
-          for (const line of lines.filter(Boolean)) el.append(document.createElement("br"), line)
+        // Same rule as _includes/phone.html (keep them in step): US numbers as
+        // (xxx) yyy-zzzz dialling +1, anything else shown and dialled as typed.
+        function phoneLink(number) {
+          let digits = String(number).replace(/[+() .-]/g, "")
+          if (digits.length === 11 && digits[0] === "1") digits = digits.slice(1)
+          const us = /^\d{10}$/.test(digits)
+          return Object.assign(document.createElement("a"), us
+            ? {href: `tel:+1${digits}`, textContent: `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`}
+            : {href: `tel:${number}`, textContent: String(number)})
+        }
+        // A pin's details, one per line: its desc (optional), address, a
+        // Google Maps link, then its phone (optional). Fresh nodes each call,
+        // since the popup and label each need their own.
+        function details(shop, location, {desc = true, phone = false} = {}) {
+          const lines = [desc && location.desc, location.street, [location.city, location.state].filter(Boolean).join(", ")]
+            .filter(Boolean)
           if (location.street) {
             const query = `${shop.name}, ${location.street}, ${location.city ?? ""}, ${location.state ?? ""} ${location.zip ?? ""}`
-            const maps = el.appendChild(Object.assign(document.createElement("a"), {
+            lines.push(Object.assign(document.createElement("a"), {
               href: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query),
               target: "_blank", textContent: "Open in Google Maps"}))
-            el.insertBefore(document.createElement("br"), maps)
           }
+          const number = location.phone ?? shop.phone
+          if (phone && number) lines.push(phoneLink(number))
+          return lines.flatMap((line, n) => n ? [document.createElement("br"), line] : [line])
+        }
+        function shopName(shop) {
+          const name = document.createElement(shop.url ? "a" : "strong")
+          name.textContent = shop.name
+          if (shop.url) Object.assign(name, {href: shop.url, target: "_blank"})
+          return name
+        }
+        function popup(shop, location) {
+          const el = document.createElement("div")
+          el.append(shopName(shop), document.createElement("br"), ...details(shop, location))
+          return el
+        }
+        // Label beside a pin: the name, expanding on hover, tap or keyboard
+        // focus (css/main.css) to its address, Maps link and phone; the desc
+        // is left out there, the name and address already say where it is.
+        // The name only acts as a link once the label is open. The "Labels" switch hides
+        // them all by a class on the map, so no tooltip is opened or closed.
+        function pinLabel(shop, location) {
+          const el = document.createElement("div")
+          el.className = "pin-box"
+          const more = document.createElement("div")
+          more.className = "pin-more"
+          more.append(...details(shop, location, {desc: false, phone: true}))
+          const name = shopName(shop)
+          name.classList.add("pin-name")
+          el.append(name, more)
+          // Leaflet hands clicks on a label to its pin, which opens the pin's
+          // popup on top of the label. Keep them on the label: the tap opens
+          // it and links inside still work, the popup stays for the pin.
+          L.DomEvent.disableClickPropagation(el)
+          // Touch has no hover to open a label first, and phones apply :hover
+          // at the tap itself, so a tap on a closed label's name would follow
+          // the link. So a touch/pen tap on a closed label only opens it (the
+          // .open class); the next tap on the name follows it. Mouse and
+          // keyboard keep hover/focus opening and a click following.
+          let pointer = ""
+          el.addEventListener("pointerdown", event => { pointer = event.pointerType })
+          el.addEventListener("click", event => {
+            const label = el.closest(".pin-label")
+            if (pointer === "mouse" || !pointer) return
+            pointer = ""
+            if (label.classList.contains("open")) {
+              if (!event.target.closest("a")) label.classList.remove("open")
+              return
+            }
+            event.preventDefault()
+            closeLabels()
+            label.classList.add("open")
+          })
           return el
         }
         async function initMap() {
@@ -503,18 +564,34 @@ metro_regions:
             load("script", {src: "/js/lib/leaflet-1.9.4/leaflet.js"}),
           ])
           map = L.map("retail-map")
+          map.on("click", closeLabels)  // a tap on open map closes tapped-open labels
           L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           }).addTo(map)
           shops.forEach((shop, i) => (shop.locations ?? []).forEach(location => {
             const at = parseGeo(location.geo)
-            if (at) pins.push({i, location, marker: L.marker(at).bindPopup(popup(shop, location))})
+            if (at) pins.push({i, location, marker: L.marker(at)
+              .bindPopup(popup(shop, location))
+              .bindTooltip(pinLabel(shop, location), {
+                // Leaflet anchors a pin's label 28px above its tip (the icon's
+                // tooltipAnchor); -13 lifts that to the pin's top, 41px up.
+                permanent: true, interactive: true, direction: "right", offset: [2, -13], className: "pin-label"})})
           }))
         }
+        // Labels crowd each other past a couple dozen pins, so each filter
+        // change resets the switch: on for 20 pins or fewer, off above that.
+        // Flipping it by hand holds until the next filter change.
+        const labelSwitch = document.getElementById("retail-map-labels")
+        const showLabels = () => document.getElementById("retail-map").classList.toggle("labels-off", !labelSwitch.checked)
+        labelSwitch.addEventListener("change", showLabels)
+        const closeLabels = () =>
+          document.querySelectorAll("#retail-map .pin-label.open").forEach(l => l.classList.remove("open"))
         function updateMap() {
           if (!map) return
           const shown = pins.filter(pin => pinShows(pin.i, pin.location))
+          labelSwitch.checked = shown.length <= 20
+          showLabels()
           for (const pin of pins) shown.includes(pin) ? pin.marker.addTo(map) : pin.marker.remove()
           const points = shown.map(pin => pin.marker.getLatLng())
           if (points.length === 1) map.setView(points[0], 15)

@@ -585,6 +585,48 @@ dialog#retail-suggest:popover-open {
     border-width: 0 0 1px;
     box-shadow: none;
   }
+  /* Pin labels: name only, expanding to the pin's details on hover or
+     keyboard focus, and lifted above neighbouring labels while open. */
+  /* Leaflet centres a right-hand label vertically on its anchor using the
+     height it measures when placing it, and points at it with an arrow at
+     half height; both shift when a label expands. So the Leaflet container
+     is a zero-height, unstyled anchor (its top sits on the pin's top) and
+     the visible box is .pin-box inside it, growing downward when opened. */
+  & .leaflet-tooltip.pin-label {
+    height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    &::before { display: none; }
+  }
+  & .pin-box {
+    padding: 6px;
+    border-radius: 3px;
+    color: #222;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  & .pin-label {
+    font-family: "BrassMono";
+    & .pin-more { display: none; }
+    /* Collapsed, the name reads as plain text; once open it's a normal
+       link. .open is set by a touch tap (see the script), since a phone's
+       tap can't be trusted to hover first. */
+    &:not(:hover, :focus-within, .open) .pin-name {
+      color: inherit;
+      text-decoration: none;
+    }
+    &:hover, &:focus-within, &.open {
+      z-index: 1000;
+      & .pin-more { display: block; }
+    }
+  }
+  &.labels-off .pin-label { display: none; }
+}
+/* The switch sits between the heading and the close button. */
+#retail-map-panel .map-labels-toggle {
+  margin: 0 1rem 0 auto;
 }
 .retail-filter ul {
   padding-left: 1.25rem;
